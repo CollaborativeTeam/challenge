@@ -1,4 +1,3 @@
-import React from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -7,6 +6,7 @@ const Wrapper = styled.div`
   padding: 20px;
 `
 
+// eslint-disable-next-line no-unused-vars
 const Transactions = [
   {
     id: 1,
@@ -30,7 +30,7 @@ const Transactions = [
   },
 ]
 
-const Home: React.FC = () => {
+const Home = () => {
   return <Wrapper>Home</Wrapper>
 }
 

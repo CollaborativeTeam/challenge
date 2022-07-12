@@ -1,3 +1,4 @@
+import Table from 'components/shared/table'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -30,8 +31,27 @@ const Transactions = [
   },
 ]
 
+const config = [
+  {
+    title: 'ID',
+    key: 'id',
+  },
+  {
+    title: 'Value',
+    key: 'value',
+  },
+  {
+    title: 'From',
+    key: 'from',
+  },
+]
+
 const Home: React.FC = () => {
-  return <Wrapper>Home</Wrapper>
+  return (
+    <Wrapper>
+      <Table data={Transactions} config={config} />
+    </Wrapper>
+  )
 }
 
 export default Home

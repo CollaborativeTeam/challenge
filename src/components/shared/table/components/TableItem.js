@@ -1,5 +1,3 @@
-import React from 'react'
-
 const TableItem = ({ item, config }) => {
   return (
     <tr>

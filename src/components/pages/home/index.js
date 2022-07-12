@@ -1,6 +1,6 @@
-import Table from 'components/shared/table'
-import React from 'react'
 import styled from 'styled-components'
+
+import Table from '../../shared/table'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -46,7 +46,7 @@ const config = [
   },
 ]
 
-const Home: React.FC = () => {
+const Home = () => {
   return (
     <Wrapper>
       <Table data={Transactions} config={config} />

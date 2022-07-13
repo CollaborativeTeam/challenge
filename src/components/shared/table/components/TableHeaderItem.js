@@ -1,19 +1,26 @@
 import styled from 'styled-components'
 
-const TH = styled.th`
-  display: table-cell;
-  vertical-align: inherit;
-  position: relative;
-  color: #000000d9;
-  font-weight: 500;
-  text-align: left;
-  background: #fafafa;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  transition: 0.3s ease;
+import { globalStyles } from '../../../../styles/constants'
+import { darkTheme } from '../../../../styles/theme'
+
+const STH = styled.th`
+  font-weight: normal;
+  padding: ${globalStyles.smSpacing};
+  color: ${darkTheme.primary};
+  text-transform: capitalize;
+  font-weight: 600;
+  font-size: 14px;
+  :not(:last-of-type) {
+    border-right: 1px solid white;
+  }
+  :first-of-type {
+    width: 1%;
+    white-space: nowrap;
+  }
 `
 
 const TableHeaderItem = ({ item }) => {
-  return <TH>{item.title}</TH>
+  return <STH>{item.title}</STH>
 }
 
 export default TableHeaderItem

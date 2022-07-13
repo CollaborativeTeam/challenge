@@ -1,10 +1,25 @@
+import styled from 'styled-components'
+
+import { globalStyles } from '../../../../styles/constants'
+import { darkTheme } from '../../../../styles/theme'
+
 const TableItem = ({ item, config }) => {
+  const STBodyTR = styled.tr`
+    background-color: #121212;
+  `
+  const STD = styled.td`
+    padding: ${globalStyles.smSpacing};
+    border: 1px solid ${darkTheme.backgroundSecondary};
+    font-size: 14px;
+    color: white;
+  `
+
   return (
-    <tr>
+    <STBodyTR>
       {config.map((c, idx) => (
-        <td key={idx}>{item[c.key]}</td>
+        <STD key={idx}>{item[c.key]}</STD>
       ))}
-    </tr>
+    </STBodyTR>
   )
 }
 

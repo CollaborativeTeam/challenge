@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
+import Table from '../../shared/table'
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: 20px;
 `
 
-// eslint-disable-next-line no-unused-vars
 const Transactions = [
   {
     id: 1,
@@ -30,8 +30,27 @@ const Transactions = [
   },
 ]
 
+const config = [
+  {
+    title: 'ID',
+    key: 'id',
+  },
+  {
+    title: 'Value',
+    key: 'value',
+  },
+  {
+    title: 'From',
+    key: 'from',
+  },
+]
+
 const Home = () => {
-  return <Wrapper>Home</Wrapper>
+  return (
+    <Wrapper>
+      <Table data={Transactions} config={config} />
+    </Wrapper>
+  )
 }
 
 export default Home

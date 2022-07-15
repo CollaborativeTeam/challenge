@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-
+import { Table } from '../../shared/Table'
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -30,8 +30,18 @@ const Transactions = [
   },
 ]
 
+const Configuration = {
+  keys: Object.keys(Transactions[0]),
+  totalOfKeys: Object.keys(Transactions[0]).length,
+}
+
+Transactions.keys()
 const Home = () => {
-  return <Wrapper>Home</Wrapper>
+  return (
+    <Wrapper>
+      <Table data={Transactions} config={Configuration} />
+    </Wrapper>
+  )
 }
 
 export default Home

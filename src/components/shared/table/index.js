@@ -21,7 +21,6 @@ const STHead = styled.thead`
 const STHeadTR = styled.tr`
   background-color: ${darkTheme.backgroundPrimary};
 `
-
 const STBody = styled.tbody`
   background-color: ${darkTheme.backgroundSecondary};
 `

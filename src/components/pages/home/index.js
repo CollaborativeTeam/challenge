@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Table } from '../../shared/table/Table'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -30,8 +31,27 @@ const Transactions = [
   },
 ]
 
+const Config = [
+  {
+    title: 'Id',
+    dataIndex: 'id',
+  },
+  {
+    title: 'Value',
+    dataIndex: 'value',
+  },
+  {
+    title: 'From',
+    dataIndex: 'from',
+  },
+]
+
 const Home = () => {
-  return <Wrapper>Home</Wrapper>
+  return (
+    <Wrapper>
+      <Table data={Transactions} config={Config} />
+    </Wrapper>
+  )
 }
 
 export default Home

@@ -44,12 +44,16 @@ const Config = [
     title: 'From',
     dataIndex: 'from',
   },
+  {
+    title: 'Delete',
+    dataIndex: 'delete',
+  },
 ]
 
 const Home = () => {
   return (
     <Wrapper>
-      <Table data={Transactions} config={Config} />
+      <Table rowsData={Transactions} config={Config} />
     </Wrapper>
   )
 }

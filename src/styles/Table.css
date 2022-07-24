@@ -8,6 +8,12 @@
   border-radius: 20px;
 }
 
+tfoot {
+  color: #fff;
+  background-color: #009879;
+  font-weight: bold;
+}
+
 .styled-table thead tr {
   background-color: #009879;
   color: #ffffff;
@@ -33,4 +39,18 @@
 .styled-table tbody tr.active-row {
   font-weight: bold;
   color: #009879;
+}
+
+.delete-row-button {
+  padding: 0.3rem 0.7rem;
+  background-color: #ee0000;
+  color: #fff;
+  border-radius: 5px;
+  border: 2px solid black;
+  cursor: pointer;
+  transition: background-color 0.3s ease-out;
+}
+
+.delete-row-button:hover {
+  background-color: #b10000;
 }

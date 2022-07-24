@@ -1,8 +1,16 @@
-export function TableRow({ itemData, config }) {
+import { DeleteRowButton } from '../delete-row-button/DeleteRowButton'
+
+export function TableRow({ itemData, config, handleDeleteRow }) {
   return (
     <tr>
       {config.map((obj) => (
-        <td>{itemData[obj.dataIndex]}</td>
+        <td key={Math.random()}>
+          {obj.dataIndex !== 'delete' ? (
+            itemData[obj.dataIndex]
+          ) : (
+            <DeleteRowButton handleDeleteRow={handleDeleteRow} />
+          )}
+        </td>
       ))}
     </tr>
   )

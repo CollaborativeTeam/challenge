@@ -1,3 +1,7 @@
 export function DeleteRowButton({ handleDeleteRow }) {
-  return <button onClick={handleDeleteRow}>delete</button>
+  return (
+    <button className="delete-row-button" onClick={handleDeleteRow}>
+      delete
+    </button>
+  )
 }

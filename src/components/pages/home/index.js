@@ -1,6 +1,8 @@
 import styled from 'styled-components'
+import { TableFoot } from '../../shared/table/table-foot/TableFoot'
+import { AddRowButton } from '../../shared/table/add-row-button/AddRowButton'
+import { useState } from 'react'
 import { Table } from '../../shared/table/Table'
-
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -49,11 +51,29 @@ const Config = [
     dataIndex: 'delete',
   },
 ]
+let counter = 10
 
 const Home = () => {
+  const [data, setData] = useState(Transactions)
+  const randomObject = {
+    id: counter++,
+    value: (Math.random() * 10).toFixed(2),
+    from: '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+  }
+  const addRow = (data) => setData((prevData) => [...prevData, data])
+  const deleteRow = (id) => {
+    setData((prevData) => prevData.filter((item) => item.id !== id))
+  }
+
   return (
     <Wrapper>
-      <Table rowsData={Transactions} config={Config} />
+      <Table
+        rowsData={data}
+        config={Config}
+        footer={<TableFoot data={data} config={Config} />}
+        handleDeleteRow={deleteRow}
+      />
+      <AddRowButton handleClick={() => addRow(randomObject)} />
     </Wrapper>
   )
 }

@@ -3,13 +3,15 @@ import { DeleteRowButton } from '../delete-row-button/DeleteRowButton'
 export function TableRow({ itemData, config, handleDeleteRow }) {
   return (
     <tr>
-      {config.map((obj) =>
-        obj.dataIndex !== 'delete' ? (
-          <td>{itemData[obj.dataIndex]}</td>
-        ) : (
-          <DeleteRowButton handleDeleteRow={handleDeleteRow} />
-        )
-      )}
+      {config.map((obj) => (
+        <td key={Math.random()}>
+          {obj.dataIndex !== 'delete' ? (
+            itemData[obj.dataIndex]
+          ) : (
+            <DeleteRowButton handleDeleteRow={handleDeleteRow} />
+          )}
+        </td>
+      ))}
     </tr>
   )
 }

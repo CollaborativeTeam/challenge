@@ -22,6 +22,6 @@ Use ant design components (table and chart)
 
 ## Documentation links
 
-https://ant.design/components/table/
-https://charts.ant.design/en/docs/manual/getting-started
-https://www.covalenthq.com/ (you must login and get an api key to be able to use there apis)
+- https://ant.design/components/table/
+- https://charts.ant.design/en/docs/manual/getting-started
+- https://www.covalenthq.com/ (you must login and get an api key to be able to use there apis)

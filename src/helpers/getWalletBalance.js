@@ -9,7 +9,6 @@ export async function getWalletBalance(address, api_key) {
     const result = response.data
 
     if (result.error) {
-      console.log({ error: result.error })
       const { error_code, error_message, error } = result
       throw {
         error,
@@ -18,10 +17,8 @@ export async function getWalletBalance(address, api_key) {
       }
     }
 
-    console.log({ result }, 'from getWalletBalance')
     return result
   } catch (err) {
-    console.log({ err })
     return err
   }
 }

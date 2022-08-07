@@ -48,20 +48,6 @@ export function Dashboard({}) {
         }
       })
 
-      // response.data.items.forEach((el) => {
-      //   const { block_height, block_signed_at, gas_price, tx_hash } = el
-
-      //   finalData.push({
-      //     timestamp: Date.parse(block_signed_at),
-      //     block_height,
-      //     gas_price,
-      //     tx_hash,
-      //     key: uuid(),
-      //   })
-      // })
-
-      // task: replace forEach() with map()
-
       finalColumns = Object.keys(finalData[0]).map((key) => {
         return {
           title: key.toUpperCase(),
@@ -69,14 +55,6 @@ export function Dashboard({}) {
           key: key,
         }
       })
-
-      // Object.keys(finalData[0]).forEach((key) => {
-      //   finalColumns.push({
-      //     title: key,
-      //     dataIndex: key,
-      //     key: key,
-      //   })
-      // })
 
       setRequestError(null)
       setTableData(finalData)

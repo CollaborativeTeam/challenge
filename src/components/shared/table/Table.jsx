@@ -1,33 +1,26 @@
 import { TableRow } from './table-row/TableRow'
 import { TableHeaderItem } from './table-header-item/TableHeaderItem'
 
-export function Table({ data, config }) {
-  const totalPrice = data.reduce(
-    (total, product) => total + Number(product.value),
-    0
-  )
-  const totalColumns = Object.keys(data[0]).length
-  console.log(totalColumns)
+export function Table({ rowsData, config, handleDeleteRow, footer }) {
   return (
     <table className="styled-table">
       <thead>
         <tr>
-          {config.map((obj) => (
-            <TableHeaderItem title={obj.title} />
+          {config.map(({ dataIndex, title }) => (
+            <TableHeaderItem dataIndex={dataIndex} title={title} />
           ))}
         </tr>
       </thead>
       <tbody>
-        {data.map((item) => (
-          <TableRow itemData={item} config={config} />
+        {rowsData.map((item) => (
+          <TableRow
+            itemData={item}
+            config={config}
+            handleDeleteRow={() => handleDeleteRow(item.id)}
+          />
         ))}
       </tbody>
-      <tfoot>
-        <tr>
-          <td colSpan={totalColumns - 1}>Total value</td>
-          <td>{totalPrice.toFixed(2)}</td>
-        </tr>
-      </tfoot>
+      {footer}
     </table>
   )
 }

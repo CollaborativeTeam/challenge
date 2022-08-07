@@ -35,7 +35,6 @@ export function Dashboard({}) {
         userAddress,
         process.env.NEXT_PUBLIC_API_KEY
       )
-
       if (!response.data) throw response
 
       finalData = response.data.items.map((el) => {
@@ -66,6 +65,10 @@ export function Dashboard({}) {
       setTableData(finalData)
       setTableColumns(finalColumns)
     } catch (err) {
+      console.log({ err })
+      if (err.response?.status === 400)
+        err.message = 'This address does not exists'
+
       setRequestError(err)
       setTableData(null)
       setTableColumns(null)

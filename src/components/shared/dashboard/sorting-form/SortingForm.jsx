@@ -1,20 +1,23 @@
 import { FaFilter } from 'react-icons/fa'
+import { v4 as uuid } from 'uuid'
 import { IconBtn } from '../../generics/IconBtn/IconBtn'
 import { STFlex } from '../../generics/styled/styled'
 
-export function SortingForm({ handleOnChange, handleSort }) {
+export function SortingForm({ handleOnChange, handleSort, sortingValues }) {
   return (
     <STFlex flexDir="column" alItems="center" justCont="center">
       <label htmlFor="sort-option">Sort by:</label>
       <select onChange={handleOnChange} name="sort-option" id="sort-option">
-        <option value="timestamp">timestamp</option>
-        <option value="gas_price">gas price</option>
+        {sortingValues.map((value) => (
+          <option key={uuid()} value={value}>
+            {value.replace('_', ' ')}
+          </option>
+        ))}
       </select>
 
       <IconBtn handleClick={handleSort}>
         <FaFilter />
       </IconBtn>
-      {/* <ToggleBar /> */}
     </STFlex>
   )
 }

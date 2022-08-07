@@ -14,6 +14,7 @@ export function Dashboard({}) {
   const [requestError, setRequestError] = useState(null)
   const [sortValue, setSortValue] = useState('timestamp')
   const [loading, setLoading] = useState(false)
+  const [sortingValues, setSortingValues] = useState([])
 
   const inputValue = 'address'
 
@@ -28,6 +29,7 @@ export function Dashboard({}) {
     try {
       let finalColumns = []
       let finalData = []
+      let finalSortingValues = []
 
       const response = await getWalletBalance(
         userAddress,
@@ -48,21 +50,26 @@ export function Dashboard({}) {
         }
       })
 
-      finalColumns = Object.keys(finalData[0]).map((key) => {
+      finalColumns = Object.keys(finalData[0]).map((key, index, arr) => {
+        typeof finalData[0][key] === 'number'
+          ? finalSortingValues.push(key)
+          : null
+
         return {
-          title: key.toUpperCase(),
+          title: key.toUpperCase().replace('_', ' '),
           dataIndex: key,
           key: key,
         }
       })
-
       setRequestError(null)
+      setSortingValues(finalSortingValues)
       setTableData(finalData)
       setTableColumns(finalColumns)
     } catch (err) {
       setRequestError(err)
       setTableData(null)
       setTableColumns(null)
+      setSortingValues([])
     }
 
     setLoading(false)
@@ -113,7 +120,11 @@ export function Dashboard({}) {
       </section>
 
       <section>
-        <SortingForm handleOnChange={handleOnChange} handleSort={handleSort} />
+        <SortingForm
+          sortingValues={sortingValues}
+          handleOnChange={handleOnChange}
+          handleSort={handleSort}
+        />
       </section>
     </STWrapper>
   )

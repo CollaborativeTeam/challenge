@@ -1,7 +1,6 @@
-import { FaSearch } from 'react-icons/fa'
+import { SearchOutlined } from '@ant-design/icons'
 import { IconBtn } from '../../generics/IconBtn/IconBtn'
 import { STForm, STSpan } from '../../generics/styled/styled'
-
 export function SearchForm({ handleSubmit, message, inputName }) {
   return (
     <STForm onSubmit={handleSubmit}>
@@ -16,7 +15,7 @@ export function SearchForm({ handleSubmit, message, inputName }) {
         id={inputName}
       />
       <IconBtn>
-        <FaSearch />
+        <SearchOutlined />
       </IconBtn>
     </STForm>
   )

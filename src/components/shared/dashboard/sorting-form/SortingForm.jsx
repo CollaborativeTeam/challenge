@@ -1,4 +1,4 @@
-import { FaFilter } from 'react-icons/fa'
+import { FilterOutlined } from '@ant-design/icons'
 import { v4 as uuid } from 'uuid'
 import { IconBtn } from '../../generics/IconBtn/IconBtn'
 import { STFlex } from '../../generics/styled/styled'
@@ -16,7 +16,7 @@ export function SortingForm({ handleOnChange, handleSort, sortingValues }) {
       </select>
 
       <IconBtn handleClick={handleSort}>
-        <FaFilter />
+        <FilterOutlined />
       </IconBtn>
     </STFlex>
   )

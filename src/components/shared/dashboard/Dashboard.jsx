@@ -2,11 +2,9 @@ import { useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { getWalletBalance } from '../../../helpers/getWalletBalance'
 import { STWrapper } from '../generics/styled/styled'
-import { Table } from 'antd'
-import { Loader } from '../generics/icons/Loader'
-import { Message } from '../generics/message/Message'
 import { SortingForm } from './sorting-form/SortingForm'
 import { SearchForm } from './search-form/SearchForm'
+import { TableWrapper } from './table-wrapper/TableWrapper'
 
 export function Dashboard({}) {
   const [tableData, setTableData] = useState(null)
@@ -27,9 +25,7 @@ export function Dashboard({}) {
     setTableData(null)
     setTableColumns(null)
     try {
-      let finalColumns = []
-      let finalData = []
-      let finalSortingValues = []
+      const finalSortingValues = []
 
       const response = await getWalletBalance(
         userAddress,
@@ -37,7 +33,7 @@ export function Dashboard({}) {
       )
       if (!response.data) throw response
 
-      finalData = response.data.items.map((el) => {
+      const finalData = response.data.items.map((el) => {
         const { block_height, block_signed_at, gas_price, tx_hash } = el
 
         return {
@@ -49,7 +45,7 @@ export function Dashboard({}) {
         }
       })
 
-      finalColumns = Object.keys(finalData[0]).map((key, index, arr) => {
+      const finalColumns = Object.keys(finalData[0]).map((key, index, arr) => {
         typeof finalData[0][key] === 'number'
           ? finalSortingValues.push(key)
           : null
@@ -60,6 +56,7 @@ export function Dashboard({}) {
           key: key,
         }
       })
+
       setRequestError(null)
       setSortingValues(finalSortingValues)
       setTableData(finalData)
@@ -95,23 +92,12 @@ export function Dashboard({}) {
   return (
     <STWrapper>
       <section>
-        {loading ? (
-          <Loader color="#a3f" />
-        ) : requestError ? (
-          <Message color="#fff" bgColor="#a3f">
-            Error {requestError.code}: {requestError.message}. Please try again.
-          </Message>
-        ) : tableData ? (
-          <Table
-            className="antd-table"
-            dataSource={tableData}
-            columns={tableColumns}
-          />
-        ) : (
-          <Message color="#fff" bgColor="#a3f">
-            Enter your address...
-          </Message>
-        )}
+        <TableWrapper
+          loading={loading}
+          requestError={requestError}
+          tableColumns={tableColumns}
+          tableData={tableData}
+        />
       </section>
 
       <section>

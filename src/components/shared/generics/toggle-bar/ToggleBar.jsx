@@ -75,10 +75,15 @@ const SwitchLabel = styled.label`
   }
 `
 
-export function ToggleBar({}) {
+export function ToggleBar({ handleChecked, checked }) {
   return (
     <SwitchContainer>
-      <Switch type="checkbox" id="switch" />
+      <Switch
+        onChange={handleChecked}
+        checked={checked}
+        type="checkbox"
+        id="switch"
+      />
       <SwitchColor />
       <SwitchLabel htmlFor="switch" />
     </SwitchContainer>

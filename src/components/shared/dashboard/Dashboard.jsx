@@ -1,39 +1,42 @@
-import { useState } from 'react'
+import { ToggleBar } from '../generics/toggle-bar/ToggleBar'
+import { useState, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
-import { getWalletBalance } from '../../../helpers/getWalletBalance'
-import { STWrapper } from '../generics/styled/styled'
-import { SortingForm } from './sorting-form/SortingForm'
+import { getWalletBalance } from '../../../services/getWalletBalance'
+import { STFlex, STWrapper } from '../generics/styled/styled'
 import { SearchForm } from './search-form/SearchForm'
 import { TableWrapper } from './table-wrapper/TableWrapper'
+
+const inputValue = 'address'
+const params = {
+  key: process.env.NEXT_PUBLIC_API_KEY,
+  'page-size': 6,
+}
 
 export function Dashboard({}) {
   const [tableData, setTableData] = useState(null)
   const [tableColumns, setTableColumns] = useState(null)
   const [requestError, setRequestError] = useState(null)
-  const [sortValue, setSortValue] = useState('timestamp')
+  const [ascendingSort, setAscendingSort] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [sortingValues, setSortingValues] = useState([])
+  const [lastAddress, setLastAddress] = useState(null)
 
-  const inputValue = 'address'
+  useEffect(() => {
+    if (!lastAddress) return
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    const userAddress = e.target[inputValue].value.trim()
-    if (!userAddress) return
+    params['block-signed-at-asc'] = ascendingSort
+    getAddressData(lastAddress)
+  }, [ascendingSort])
 
+  const getAddressData = async (address) => {
     setLoading(true)
     setTableData(null)
     setTableColumns(null)
     try {
-      const finalSortingValues = []
+      const response = await getWalletBalance(address, params)
 
-      const response = await getWalletBalance(
-        userAddress,
-        process.env.NEXT_PUBLIC_API_KEY
-      )
       if (!response.data) throw response
 
-      const finalData = response.data.items.map((el) => {
+      const data = response.data.items.map((el) => {
         const { block_height, block_signed_at, gas_price, tx_hash } = el
 
         return {
@@ -45,10 +48,8 @@ export function Dashboard({}) {
         }
       })
 
-      const finalColumns = Object.keys(finalData[0]).map((key, index, arr) => {
-        typeof finalData[0][key] === 'number'
-          ? finalSortingValues.push(key)
-          : null
+      const columns = Object.keys(data[0]).map((key) => {
+        // typeof data[0][key] === 'number' ? sortingValues.push(key) : null
 
         return {
           title: key.toUpperCase().replace('_', ' '),
@@ -58,35 +59,34 @@ export function Dashboard({}) {
       })
 
       setRequestError(null)
-      setSortingValues(finalSortingValues)
-      setTableData(finalData)
-      setTableColumns(finalColumns)
+      setTableData(data)
+      setTableColumns(columns)
     } catch (err) {
-      console.log({ err })
+      // 400 or 404?
       if (err.response?.status === 400)
         err.message = 'This address does not exists'
 
       setRequestError(err)
       setTableData(null)
       setTableColumns(null)
-      setSortingValues([])
+    } finally {
+      setLoading(false)
     }
+  }
 
-    setLoading(false)
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const userAddress = e.target[inputValue].value.trim()
+    if (!userAddress) return
+    setLastAddress(userAddress)
+    getAddressData(userAddress)
   }
 
   // task: implement toggle-bar component
   // to change the sorting order (btw ascending to descending)
 
-  const handleSort = () => {
-    const sortedData = [...tableData].sort(
-      (a, b) => b[sortValue] - a[sortValue]
-    )
-    setTableData(sortedData)
-  }
-
-  const handleOnChange = (e) => {
-    setSortValue(e.target.value)
+  const handleChecked = (e) => {
+    setAscendingSort(e.target.checked)
   }
 
   return (
@@ -99,7 +99,6 @@ export function Dashboard({}) {
           tableData={tableData}
         />
       </section>
-
       <section>
         <SearchForm
           inputName={inputValue}
@@ -107,14 +106,10 @@ export function Dashboard({}) {
           handleSubmit={handleSubmit}
         />
       </section>
-
-      <section>
-        <SortingForm
-          sortingValues={sortingValues}
-          handleOnChange={handleOnChange}
-          handleSort={handleSort}
-        />
-      </section>
+      <STFlex justCont="center" alItems="center" flexDir="column">
+        <p>Ascending order:</p>
+        <ToggleBar checked={ascendingSort} handleChecked={handleChecked} />
+      </STFlex>
     </STWrapper>
   )
 }

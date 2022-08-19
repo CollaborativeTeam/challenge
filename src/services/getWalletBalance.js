@@ -1,11 +1,14 @@
 import axios from 'axios'
 
-export async function getWalletBalance(address, api_key) {
-  const URL = `${process.env.NEXT_PUBLIC_BASE_URL}1/address/${address}/transactions_v2/?key=${api_key}`
+export async function getWalletBalance(address, params) {
+  const URL = `${process.env.NEXT_PUBLIC_BASE_URL}1/address/${address}/transactions_v2/`
+  console.log({ params })
 
-  console.log({ URL })
   try {
-    const response = await axios.get(URL)
+    const response = await axios.get(URL, { params })
+
+    console.log('this', axios.getUri({ url: URL, params }))
+    console.log({ response })
     const result = response.data
 
     if (result.error) {

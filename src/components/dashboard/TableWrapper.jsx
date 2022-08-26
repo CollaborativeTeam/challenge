@@ -1,6 +1,6 @@
 import { Table } from 'antd'
-import { Message } from '../../generics/message/Message'
-import { Loader } from '../../generics/icons/Loader'
+import { Message } from 'components/shared/Message'
+import { Loader } from 'components/shared/Loader'
 
 export function TableWrapper({
   loading,

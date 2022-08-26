@@ -1,5 +1,5 @@
-import { TableRow } from './table-row/TableRow'
-import { TableHeaderItem } from './table-header-item/TableHeaderItem'
+import { TableRow } from './TableRow'
+import { TableHeaderItem } from './TableHeaderItem'
 
 export function Table({ rowsData, config, handleDeleteRow, footer }) {
   return (

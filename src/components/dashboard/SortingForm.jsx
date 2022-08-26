@@ -1,7 +1,7 @@
 import { FilterOutlined } from '@ant-design/icons'
 import { v4 as uuid } from 'uuid'
-import { IconBtn } from '../../generics/IconBtn/IconBtn'
-import { STFlex } from '../../generics/styled/styled'
+import { IconBtn } from 'components/shared/generics/toggle-bar/IconBtn'
+import { STFlex } from 'components/shared/styled'
 
 export function SortingForm({ handleOnChange, handleSort, sortingValues }) {
   return (

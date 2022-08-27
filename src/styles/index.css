@@ -22,21 +22,19 @@ select {
 
 button {
   width: 150px;
-  padding: 0.8rem 0;
   transition: all 0.3s ease-out;
+  background-color: #121212;
   color: #fff;
   font-size: 1.3rem;
-  background-color: #a3f;
   cursor: pointer;
   margin: 1rem;
 }
 
 button:hover {
-  background-color: #0099ff;
+  background-color: #232323;
 }
 
 button:disabled {
-  background-color: #a3f;
   color: #aaa;
   cursor: not-allowed;
 }

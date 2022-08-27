@@ -17,11 +17,7 @@ export function TableWrapper({
           Error {requestError.code}: {requestError.message}. Please try again.
         </Message>
       ) : tableData ? (
-        <Table
-          className="antd-table"
-          dataSource={tableData}
-          columns={tableColumns}
-        />
+        <Table dataSource={tableData} columns={tableColumns} />
       ) : (
         <Message color="#fff" bgColor="#a3f">
           Enter your address...

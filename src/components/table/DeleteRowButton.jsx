@@ -1,7 +1,9 @@
+import { STButton } from 'components/shared/styled'
+
 export function DeleteRowButton({ handleDeleteRow }) {
   return (
-    <button className="delete-row-button" onClick={handleDeleteRow}>
+    <STButton bgColor="#f23" bgColorHover="#f80" onClick={handleDeleteRow}>
       delete
-    </button>
+    </STButton>
   )
 }

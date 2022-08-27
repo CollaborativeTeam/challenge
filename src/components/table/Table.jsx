@@ -3,7 +3,7 @@ import { TableHeaderItem } from './TableHeaderItem'
 
 export function Table({ rowsData, config, handleDeleteRow, footer }) {
   return (
-    <table className="styled-table">
+    <table>
       <thead>
         <tr>
           {config.map(({ dataIndex, title }) => (

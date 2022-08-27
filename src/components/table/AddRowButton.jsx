@@ -1,7 +1,5 @@
+import { STButton } from 'components/shared/styled'
+
 export function AddRowButton({ handleClick }) {
-  return (
-    <button className="add-row-button" onClick={handleClick}>
-      add row
-    </button>
-  )
+  return <STButton onClick={handleClick}>add row</STButton>
 }

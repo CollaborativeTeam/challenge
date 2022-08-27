@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { TableFoot } from 'components/table/TableFoot'
 import { AddRowButton } from 'components/table/AddRowButton'
 import { Table } from 'components/table/Table'
-import Head from 'next/head'
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -71,14 +71,6 @@ const Home = () => {
 
   return (
     <Wrapper>
-      <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
-          rel="stylesheet"
-        />
-      </Head>
       <Table
         rowsData={data}
         config={Config}

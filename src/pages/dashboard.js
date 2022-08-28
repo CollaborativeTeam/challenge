@@ -31,16 +31,25 @@ export default function Dashboard({}) {
     setLoading(true)
     setTableData(null)
     setTableColumns(null)
+
     try {
-      const response = await getWalletBalance(address, params)
+      const { data: requestData } = await getWalletBalance(address, { params })
 
-      if (!response.data) throw response
+      if (requestData.error) {
+        const { error_code, error_message } = response.data
 
-      const data = response.data.items.map((el) => {
+        throw {
+          code: error_code,
+          message: error_message || 'There was an error',
+        }
+      }
+
+      const tableData = requestData.data.items.map((el) => {
         const { block_height, block_signed_at, gas_price, tx_hash } = el
 
         return {
-          timestamp: Date.parse(block_signed_at),
+          // timestamp: Date.parse(block_signed_at),
+          creation_date: new Date(block_signed_at).toLocaleString(),
           block_height,
           gas_price,
           tx_hash,
@@ -48,9 +57,7 @@ export default function Dashboard({}) {
         }
       })
 
-      const columns = Object.keys(data[0]).map((key) => {
-        // typeof data[0][key] === 'number' ? sortingValues.push(key) : null
-
+      const tableColumns = Object.keys(tableData[0]).map((key) => {
         return {
           title: key.toUpperCase().replace('_', ' '),
           dataIndex: key,
@@ -59,13 +66,9 @@ export default function Dashboard({}) {
       })
 
       setRequestError(null)
-      setTableData(data)
-      setTableColumns(columns)
+      setTableData(tableData)
+      setTableColumns(tableColumns)
     } catch (err) {
-      // 400 or 404?
-      if (err.response?.status === 400)
-        err.message = 'This address does not exists'
-
       setRequestError(err)
       setTableData(null)
       setTableColumns(null)
@@ -82,12 +85,7 @@ export default function Dashboard({}) {
     getAddressData(userAddress)
   }
 
-  // task: implement toggle-bar component
-  // to change the sorting order (btw ascending to descending)
-
-  const handleChecked = (e) => {
-    setAscendingSort(e.target.checked)
-  }
+  const handleChecked = (e) => setAscendingSort(e.target.checked)
 
   return (
     <STWrapper>

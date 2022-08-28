@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { ToggleBar } from 'components/shared/ToggleBar'
 import { getWalletBalance } from 'services/getWalletBalance'
-import { STFlex, STWrapper } from 'components/shared/styled'
+import { STWrapper } from 'components/shared/styled'
 import { SearchForm } from 'components/dashboard/SearchForm'
 import { TableWrapper } from 'components/dashboard/TableWrapper'
+import getSortingFunction from 'helpers/getSortingFunction'
 
 const inputValue = 'address'
 const params = {
@@ -16,16 +16,7 @@ export default function Dashboard({}) {
   const [tableData, setTableData] = useState(null)
   const [tableColumns, setTableColumns] = useState(null)
   const [requestError, setRequestError] = useState(null)
-  const [ascendingSort, setAscendingSort] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [lastAddress, setLastAddress] = useState(null)
-
-  useEffect(() => {
-    if (!lastAddress) return
-
-    params['block-signed-at-asc'] = ascendingSort
-    getAddressData(lastAddress)
-  }, [ascendingSort])
 
   const getAddressData = async (address) => {
     setLoading(true)
@@ -62,6 +53,7 @@ export default function Dashboard({}) {
           title: key.toUpperCase().replace('_', ' '),
           dataIndex: key,
           key: key,
+          sorter: getSortingFunction(key, tableData[0][key]),
         }
       })
 
@@ -81,11 +73,8 @@ export default function Dashboard({}) {
     e.preventDefault()
     const userAddress = e.target[inputValue].value.trim()
     if (!userAddress) return
-    setLastAddress(userAddress)
     getAddressData(userAddress)
   }
-
-  const handleChecked = (e) => setAscendingSort(e.target.checked)
 
   return (
     <STWrapper>
@@ -104,10 +93,6 @@ export default function Dashboard({}) {
           handleSubmit={handleSubmit}
         />
       </section>
-      <STFlex justCont="center" alItems="center" flexDir="column">
-        <p>Ascending order:</p>
-        <ToggleBar checked={ascendingSort} handleChecked={handleChecked} />
-      </STFlex>
     </STWrapper>
   )
 }

@@ -53,6 +53,7 @@ export const STButton = styled.button`
   }
 `
 export const STTitle = styled.h3`
+  margin: 1rem 0;
   font-size: 1.5rem;
   padding: 1rem;
   background-color: ${({ bgColor }) => bgColor};

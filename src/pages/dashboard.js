@@ -3,14 +3,19 @@ import { v4 as uuid } from 'uuid'
 import { getWalletBalance } from 'services/getWalletBalance'
 import { STWrapper } from 'components/shared/styled'
 import { SearchForm } from 'components/dashboard/SearchForm'
-import { TableWrapper } from 'components/dashboard/TableWrapper'
 import getSortingFunction from 'helpers/getSortingFunction'
+import { Table } from 'antd'
+import { Message } from 'components/shared/Message'
 
 const inputValue = 'address'
-const params = {
+const initialParams = {
   key: process.env.NEXT_PUBLIC_API_KEY,
-  'page-size': 6,
+  'no-logs': true,
+  'page-size': 10,
 }
+
+let userAddress = null
+let totalCount = null
 
 export default function Dashboard({}) {
   const [tableData, setTableData] = useState(null)
@@ -18,13 +23,14 @@ export default function Dashboard({}) {
   const [requestError, setRequestError] = useState(null)
   const [loading, setLoading] = useState(false)
 
-  const getAddressData = async (address) => {
+  const getAddressData = async (address, params) => {
     setLoading(true)
-    setTableData(null)
-    setTableColumns(null)
-
     try {
-      const { data: requestData } = await getWalletBalance(address, { params })
+      const { data: requestData } = await getWalletBalance(address, {
+        params: { ...initialParams, ...params },
+      })
+
+      const { items } = requestData.data
 
       if (requestData.error) {
         const { error_code, error_message } = response.data
@@ -35,7 +41,7 @@ export default function Dashboard({}) {
         }
       }
 
-      const tableData = requestData.data.items.map((el) => {
+      const tableData = items.map((el) => {
         const { block_height, block_signed_at, gas_price, tx_hash } = el
 
         return {
@@ -57,6 +63,7 @@ export default function Dashboard({}) {
         }
       })
 
+      totalCount = 100
       setRequestError(null)
       setTableData(tableData)
       setTableColumns(tableColumns)
@@ -71,27 +78,44 @@ export default function Dashboard({}) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const userAddress = e.target[inputValue].value.trim()
-    if (!userAddress) return
-    getAddressData(userAddress)
+    const address = e.target[inputValue].value.trim()
+    if (!address) return
+    userAddress = address
+    getAddressData(address)
   }
 
   return (
     <STWrapper>
-      <section>
-        <TableWrapper
-          loading={loading}
-          requestError={requestError}
-          tableColumns={tableColumns}
-          tableData={tableData}
-        />
-      </section>
       <section>
         <SearchForm
           inputName={inputValue}
           message="Enter your address"
           handleSubmit={handleSubmit}
         />
+      </section>
+      <section>
+        {requestError && (
+          <Message color="#fff" bgColor="#a3f">
+            Error {requestError.code}: {requestError.message}. Please try again.
+          </Message>
+        )}
+        {
+          <Table
+            dataSource={tableData}
+            columns={tableColumns}
+            loading={loading}
+            sticky
+            pagination={{
+              total: totalCount,
+              onChange(page, pageSize) {
+                getAddressData(userAddress, {
+                  'page-number': page,
+                  'page-size': pageSize,
+                })
+              },
+            }}
+          />
+        }
       </section>
     </STWrapper>
   )

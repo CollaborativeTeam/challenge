@@ -1,5 +1,6 @@
 import { TableRow } from './TableRow'
 import { TableHeaderItem } from './TableHeaderItem'
+import { v4 as uuid } from 'uuid'
 
 export function Table({ rowsData, config, handleDeleteRow, footer }) {
   return (
@@ -7,13 +8,14 @@ export function Table({ rowsData, config, handleDeleteRow, footer }) {
       <thead>
         <tr>
           {config.map(({ dataIndex, title }) => (
-            <TableHeaderItem dataIndex={dataIndex} title={title} />
+            <TableHeaderItem key={uuid()} dataIndex={dataIndex} title={title} />
           ))}
         </tr>
       </thead>
       <tbody>
         {rowsData.map((item) => (
           <TableRow
+            key={uuid()}
             itemData={item}
             config={config}
             handleDeleteRow={() => handleDeleteRow(item.id)}

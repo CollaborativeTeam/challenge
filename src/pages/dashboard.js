@@ -1,22 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { getAddressTransactions } from 'services/getAddressTransactions'
-import { STWrapper } from 'components/shared/styled'
+import { STTitle, STWrapper } from 'components/shared/styled'
 import { SearchForm } from 'components/dashboard/SearchForm'
 import getSortingFunction from 'helpers/getSortingFunction'
 import { Table } from 'antd'
 import { Message } from 'components/shared/Message'
-import { useTransactionContext } from 'context/TransactionContext'
+import { useAddressContext } from 'context/AddressContext'
 import { useRouter } from 'next/router'
 
-const inputValue = 'address'
-const initialParams = {
+const ADDRESS_INPUT_NAME = 'address'
+const INITIAL_PARAMS = {
   key: process.env.NEXT_PUBLIC_API_KEY,
   'no-logs': true,
   'page-size': 10,
 }
 
-let userAddress = null
 let totalCount = null
 
 export default function Dashboard({}) {
@@ -24,16 +23,21 @@ export default function Dashboard({}) {
   const [tableColumns, setTableColumns] = useState(null)
   const [requestError, setRequestError] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [userAddress, setUserAddress] = useState('')
 
   const router = useRouter()
 
-  const { setTransactionData } = useTransactionContext()
+  const { setTransactionData } = useAddressContext()
+
+  useEffect(() => {
+    setTransactionData(tableData)
+  }, [tableData])
 
   const getAddressData = async (address, params) => {
     setLoading(true)
     try {
       const { data: requestData } = await getAddressTransactions(address, {
-        params: { ...initialParams, ...params },
+        params: { ...INITIAL_PARAMS, ...params },
       })
 
       const { items } = requestData.data
@@ -82,32 +86,29 @@ export default function Dashboard({}) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const address = e.target[inputValue].value.trim()
-    if (!address) return
-    userAddress = address
-    getAddressData(address)
+    const formAddress = e.target[ADDRESS_INPUT_NAME].value.trim()
+    if (!formAddress) return
+    getAddressData(formAddress)
+    setUserAddress(formAddress)
   }
 
   return (
     <STWrapper>
       <section>
         <SearchForm
-          inputName={inputValue}
+          inputName={ADDRESS_INPUT_NAME}
           message="Enter your address"
           handleSubmit={handleSubmit}
         />
       </section>
       <section>
-        {
-          requestError &&
-            [1].map(() => {
-              router.push('transaction/demo.eth')
-              return 1
-            })
-          // <Message color="#fff" bgColor="#a3f">
-          //   Error {requestError.code}: {requestError.message}. Please try again.
-          // </Message>
-        }
+        {requestError && (
+          <Message color="#fff" bgColor="#a3f">
+            Error {requestError.code}: {requestError.message}. Please try again.
+          </Message>
+        )}
+
+        {userAddress && <STTitle>Address: {userAddress}</STTitle>}
 
         <Table
           dataSource={tableData}

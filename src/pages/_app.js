@@ -1,6 +1,6 @@
 import 'antd/dist/antd.css'
 import 'styles/index.css'
-import { TransactionProvider } from 'context/TransactionContext'
+import { AddressProvider } from 'context/AddressContext'
 import Link from 'next/link'
 import styled from 'styled-components'
 
@@ -21,7 +21,7 @@ const STNav = styled.nav`
 
 const MyApp = ({ Component, pageProps }) => {
   return (
-    <TransactionProvider>
+    <AddressProvider>
       <header>
         <STNav>
           <Link href="/">
@@ -36,7 +36,7 @@ const MyApp = ({ Component, pageProps }) => {
         </STNav>
       </header>
       <Component {...pageProps} />
-    </TransactionProvider>
+    </AddressProvider>
   )
 }
 

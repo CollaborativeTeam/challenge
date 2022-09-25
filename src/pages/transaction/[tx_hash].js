@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useTransactionContext } from 'context/TransactionContext'
+import { useAddressContext } from 'context/AddressContext'
 import { useRouter } from 'next/router'
 import { getTransactionData } from 'services/getTransactionData'
 import { LeftOutlined } from '@ant-design/icons'
 import { Table } from 'antd'
 import { v4 as uuid } from 'uuid'
 import { Message } from 'components/shared/Message'
-import { isEmpty } from 'helpers/isEmpty'
+import { isEmpty } from 'helpers/isEmptyObj'
 import { STTitle } from 'components/shared/styled'
 import Link from 'next/link'
 
@@ -16,7 +16,7 @@ export default function Transaction() {
   const [loading, setLoading] = useState(false)
   const [requestError, setRequestError] = useState(null)
 
-  const { transactionData } = useTransactionContext()
+  const { transactionData } = useAddressContext()
 
   const {
     query: { tx_hash },

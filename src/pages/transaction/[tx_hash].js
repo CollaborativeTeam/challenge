@@ -6,7 +6,7 @@ import { LeftOutlined } from '@ant-design/icons'
 import { Table } from 'antd'
 import { v4 as uuid } from 'uuid'
 import { Message } from 'components/shared/Message'
-import { isEmpty } from 'helpers/isEmptyObj'
+import { isEmpty } from 'helpers/isEmpty'
 import { STTitle } from 'components/shared/styled'
 import Link from 'next/link'
 

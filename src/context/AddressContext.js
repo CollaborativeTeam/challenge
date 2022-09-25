@@ -4,7 +4,7 @@ const AddressContext = createContext()
 
 export const AddressProvider = ({ children }) => {
   const [transactionData, setTransactionData] = useState({})
-  const [addressData, setAddressData] = useState([])
+  const [addressData, setAddressData] = useState({})
 
   return (
     <AddressContext.Provider

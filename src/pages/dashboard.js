@@ -8,6 +8,7 @@ import { Table } from 'antd'
 import { Message } from 'components/shared/Message'
 import { useAddressContext } from 'context/AddressContext'
 import { useRouter } from 'next/router'
+import { isEmpty } from 'helpers/isEmpty'
 
 const ADDRESS_INPUT_NAME = 'address'
 const INITIAL_PARAMS = {
@@ -27,11 +28,26 @@ export default function Dashboard({}) {
 
   const router = useRouter()
 
-  const { setTransactionData } = useAddressContext()
+  const { setTransactionData, addressData, setAddressData } =
+    useAddressContext()
 
   useEffect(() => {
-    setTransactionData(tableData)
-  }, [tableData])
+    setAddressData({
+      userAddress,
+      transactionsData: tableData,
+      transactionsColumns: tableColumns,
+    })
+  }, [tableData, tableColumns, userAddress])
+
+  useEffect(() => {
+    if (!isEmpty(addressData)) {
+      const { transactionsData, transactionsColumns, userAddress } = addressData
+
+      setTableData(transactionsData)
+      setUserAddress(userAddress)
+      setTableColumns(transactionsColumns)
+    }
+  }, [])
 
   const getAddressData = async (address, params) => {
     setLoading(true)

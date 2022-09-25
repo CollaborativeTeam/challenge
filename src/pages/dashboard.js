@@ -98,11 +98,16 @@ export default function Dashboard({}) {
         />
       </section>
       <section>
-        {requestError && (
-          <Message color="#fff" bgColor="#a3f">
-            Error {requestError.code}: {requestError.message}. Please try again.
-          </Message>
-        )}
+        {
+          requestError &&
+            [1].map(() => {
+              router.push('transaction/demo.eth')
+              return 1
+            })
+          // <Message color="#fff" bgColor="#a3f">
+          //   Error {requestError.code}: {requestError.message}. Please try again.
+          // </Message>
+        }
 
         <Table
           dataSource={tableData}
@@ -122,7 +127,7 @@ export default function Dashboard({}) {
             return {
               onClick: () => {
                 setTransactionData(record)
-                router.push('transaction')
+                router.push(`transaction/${record.tx_hash}`)
               },
             }
           }}

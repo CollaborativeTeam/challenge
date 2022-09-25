@@ -9,6 +9,15 @@ body {
   padding: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h6 {
+  color: inherit;
+  text-align: center;
+}
+
 button,
 input,
 select {
@@ -43,4 +52,8 @@ label {
   text-align: center;
   padding: 1rem;
   margin: 0;
+}
+
+a:hover {
+  text-decoration: underline;
 }

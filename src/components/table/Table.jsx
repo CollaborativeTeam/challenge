@@ -1,19 +1,21 @@
-import { TableRow } from './table-row/TableRow'
-import { TableHeaderItem } from './table-header-item/TableHeaderItem'
+import { TableRow } from './TableRow'
+import { TableHeaderItem } from './TableHeaderItem'
+import { v4 as uuid } from 'uuid'
 
 export function Table({ rowsData, config, handleDeleteRow, footer }) {
   return (
-    <table className="styled-table">
+    <table>
       <thead>
         <tr>
           {config.map(({ dataIndex, title }) => (
-            <TableHeaderItem dataIndex={dataIndex} title={title} />
+            <TableHeaderItem key={uuid()} dataIndex={dataIndex} title={title} />
           ))}
         </tr>
       </thead>
       <tbody>
         {rowsData.map((item) => (
           <TableRow
+            key={uuid()}
             itemData={item}
             config={config}
             handleDeleteRow={() => handleDeleteRow(item.id)}

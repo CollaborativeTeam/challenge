@@ -15,11 +15,15 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
+    "@ant-design/icons": "^4.7.0",
     "antd": "^4.21.6",
+    "axios": "^0.27.2",
     "next": "12.1.5",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "eslint": "8.14.0",

@@ -1,3 +1,9 @@
-import Home from '../components/pages/home'
+import { STTitle } from 'components/shared/styled'
 
-export default Home
+export default function Home() {
+  return (
+    <>
+      <STTitle>Welcome!</STTitle>
+    </>
+  )
+}

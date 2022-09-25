@@ -1,4 +1,4 @@
-import { DeleteRowButton } from '../delete-row-button/DeleteRowButton'
+import { DeleteRowButton } from './DeleteRowButton'
 
 export function TableRow({ itemData, config, handleDeleteRow }) {
   return (

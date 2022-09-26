@@ -15,9 +15,8 @@ const INITIAL_PARAMS = {
   key: process.env.NEXT_PUBLIC_API_KEY,
   'no-logs': true,
   'page-size': 10,
+  'page-number': 0,
 }
-
-let totalCount = null
 
 export default function Dashboard({}) {
   const [tableData, setTableData] = useState(null)
@@ -25,6 +24,11 @@ export default function Dashboard({}) {
   const [requestError, setRequestError] = useState(null)
   const [loading, setLoading] = useState(false)
   const [userAddress, setUserAddress] = useState('')
+  const [pagination, setPagination] = useState({
+    prev: null,
+    next: null,
+    page_number: 0,
+  })
 
   const router = useRouter()
 
@@ -34,29 +38,30 @@ export default function Dashboard({}) {
   useEffect(() => {
     setAddressData({
       userAddress,
+      pagination,
       transactionsData: tableData,
       transactionsColumns: tableColumns,
     })
-  }, [tableData, tableColumns, userAddress])
+  }, [tableData, tableColumns, userAddress, pagination])
 
   useEffect(() => {
     if (!isEmpty(addressData)) {
-      const { transactionsData, transactionsColumns, userAddress } = addressData
+      const { transactionsData, transactionsColumns, userAddress, pagination } =
+        addressData
 
       setTableData(transactionsData)
       setUserAddress(userAddress)
       setTableColumns(transactionsColumns)
+      setPagination(pagination)
     }
   }, [])
 
-  const getAddressData = async (address, params) => {
+  const getAddressData = async (address = userAddress, params) => {
     setLoading(true)
     try {
       const { data: requestData } = await getAddressTransactions(address, {
         params: { ...INITIAL_PARAMS, ...params },
       })
-
-      const { items } = requestData.data
 
       if (requestData.error) {
         throw {
@@ -64,6 +69,11 @@ export default function Dashboard({}) {
           message: requestData.error_message || 'There was an error',
         }
       }
+
+      const {
+        items,
+        pagination: { has_more, page_number },
+      } = requestData.data
 
       const tableData = items.map((el) => {
         const { block_height, block_signed_at, gas_price, tx_hash } = el
@@ -87,10 +97,10 @@ export default function Dashboard({}) {
         }
       })
 
-      totalCount = 100
       setRequestError(null)
       setTableData(tableData)
       setTableColumns(tableColumns)
+      setPagination({ prev: page_number > 0, next: has_more, page_number })
     } catch (err) {
       setRequestError(err)
       setTableData(null)
@@ -100,7 +110,7 @@ export default function Dashboard({}) {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault()
     const formAddress = e.target[ADDRESS_INPUT_NAME].value.trim()
     if (!formAddress) return
@@ -114,7 +124,7 @@ export default function Dashboard({}) {
         <SearchForm
           inputName={ADDRESS_INPUT_NAME}
           message="Enter your address"
-          handleSubmit={handleSubmit}
+          handleSubmit={handleFormSubmit}
         />
       </section>
       <section>
@@ -131,15 +141,6 @@ export default function Dashboard({}) {
           columns={tableColumns}
           loading={loading}
           sticky
-          pagination={{
-            total: totalCount,
-            onChange(page, pageSize) {
-              getAddressData(userAddress, {
-                'page-number': page,
-                'page-size': pageSize,
-              })
-            },
-          }}
           onRow={(record) => {
             return {
               onClick: () => {
@@ -150,6 +151,29 @@ export default function Dashboard({}) {
           }}
         />
       </section>
+
+      <nav>
+        <button
+          disabled={!pagination.prev}
+          onClick={() =>
+            getAddressData(userAddress, {
+              'page-number': pagination.page_number - 1,
+            })
+          }
+        >
+          Previous
+        </button>
+        <button
+          disabled={!pagination.next}
+          onClick={() =>
+            getAddressData(userAddress, {
+              'page-number': pagination.page_number + 1,
+            })
+          }
+        >
+          Next
+        </button>
+      </nav>
     </STWrapper>
   )
 }

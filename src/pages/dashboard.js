@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { getAddressTransactions } from 'services/getAddressTransactions'
 import { STTitle, STWrapper } from 'components/shared/styled'
-import { SearchForm } from 'components/dashboard/SearchForm'
+import { SearchForm } from 'components/shared/SearchForm'
 import getSortingFunction from 'helpers/getSortingFunction'
 import { Table } from 'antd'
-import { Message } from 'components/shared/Message'
 import { useAddressContext } from 'context/AddressContext'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'helpers/isEmpty'
@@ -129,9 +128,9 @@ export default function Dashboard({}) {
       </section>
       <section>
         {requestError && (
-          <Message color="#fff" bgColor="#a3f">
+          <STTitle color="#fff" bgColor="#a3f">
             Error {requestError.code}: {requestError.message}. Please try again.
-          </Message>
+          </STTitle>
         )}
 
         {userAddress && <STTitle>Address: {userAddress}</STTitle>}
@@ -140,6 +139,7 @@ export default function Dashboard({}) {
           dataSource={tableData}
           columns={tableColumns}
           loading={loading}
+          pagination={{ hideOnSinglePage: true }}
           sticky
           onRow={(record) => {
             return {

@@ -1,6 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons'
-import { IconBtn } from 'components/shared/IconBtn'
+import { STIconBtn } from 'components/shared/styled'
 import { STForm, STSpan } from 'components/shared/styled'
+
 export function SearchForm({ handleSubmit, message, inputName }) {
   return (
     <STForm onSubmit={handleSubmit}>
@@ -14,9 +15,9 @@ export function SearchForm({ handleSubmit, message, inputName }) {
         name={inputName}
         id={inputName}
       />
-      <IconBtn>
+      <STIconBtn>
         <SearchOutlined />
-      </IconBtn>
+      </STIconBtn>
     </STForm>
   )
 }

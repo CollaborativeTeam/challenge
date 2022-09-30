@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
-import { v4 as uuid } from 'uuid'
-import { getAddressTransactions } from 'services/getAddressTransactions'
-import { STTitle, STWrapper } from 'components/shared/styled'
-import { SearchForm } from 'components/shared/SearchForm'
-import getSortingFunction from 'helpers/getSortingFunction'
 import { Table } from 'antd'
+import { SearchForm } from 'components/shared/SearchForm'
+import { STTitle, STWrapper } from 'components/shared/styled'
 import { useAddressContext } from 'context/AddressContext'
-import { useRouter } from 'next/router'
+import getSortingFunction from 'helpers/getSortingFunction'
 import { isEmpty } from 'helpers/isEmpty'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import { getAddressTransactions } from 'services/getAddressTransactions'
+import { v4 as uuid } from 'uuid'
 
 const ADDRESS_INPUT_NAME = 'address'
 const INITIAL_PARAMS = {
@@ -17,7 +17,7 @@ const INITIAL_PARAMS = {
   'page-number': 0,
 }
 
-export default function Dashboard({}) {
+export default function Dashboard() {
   const [tableData, setTableData] = useState(null)
   const [tableColumns, setTableColumns] = useState(null)
   const [requestError, setRequestError] = useState(null)

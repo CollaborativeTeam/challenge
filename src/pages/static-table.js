@@ -1,8 +1,8 @@
-import styled from 'styled-components'
-import { useState } from 'react'
-import { TableFoot } from 'components/table/TableFoot'
 import { AddRowButton } from 'components/table/AddRowButton'
 import { Table } from 'components/table/Table'
+import { TableFoot } from 'components/table/TableFoot'
+import { useState } from 'react'
+import styled from 'styled-components'
 
 const Wrapper = styled.div`
   width: 100%;

@@ -1,6 +1,7 @@
-import { TableRow } from './TableRow'
-import { TableHeaderItem } from './TableHeaderItem'
 import { v4 as uuid } from 'uuid'
+
+import { TableHeaderItem } from './TableHeaderItem'
+import { TableRow } from './TableRow'
 
 export function Table({ rowsData, config, handleDeleteRow, footer }) {
   return (

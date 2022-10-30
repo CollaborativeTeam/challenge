@@ -1,6 +1,12 @@
-import { Table } from 'antd'
+import Container from '@mui/material/Container'
+import Typography from '@mui/material/Typography'
+// import Button from '@mui/material/Button'
+
+import PaginationBar from 'components/pages/Dasboard/components/PaginationBar'
+// import { Table } from 'antd'
 import { SearchForm } from 'components/shared/SearchForm'
-import { STTitle, STWrapper } from 'components/shared/styled'
+import { STTitle } from 'components/shared/styled'
+import { TransactionsTable } from 'components/TransactionsTable'
 import { useAddressContext } from 'context/AddressContext'
 import getSortingFunction from 'helpers/getSortingFunction'
 import { isEmpty } from 'helpers/isEmpty'
@@ -18,15 +24,15 @@ const INITIAL_PARAMS = {
 }
 
 export default function Dashboard() {
-  const [tableData, setTableData] = useState(null)
-  const [tableColumns, setTableColumns] = useState(null)
+  const [tableRows, setTableRows] = useState(null)
+  const [tableHeaders, setTableHeaders] = useState(null)
   const [requestError, setRequestError] = useState(null)
   const [loading, setLoading] = useState(false)
   const [userAddress, setUserAddress] = useState('')
   const [pagination, setPagination] = useState({
     prev: null,
     next: null,
-    page_number: 0,
+    page_number: null,
   })
 
   const router = useRouter()
@@ -38,19 +44,19 @@ export default function Dashboard() {
     setAddressData({
       userAddress,
       pagination,
-      transactionsData: tableData,
-      transactionsColumns: tableColumns,
+      transactionsData: tableRows,
+      transactionsColumns: tableHeaders,
     })
-  }, [tableData, tableColumns, userAddress, pagination])
+  }, [tableRows, tableHeaders, userAddress, pagination])
 
   useEffect(() => {
     if (!isEmpty(addressData)) {
       const { transactionsData, transactionsColumns, userAddress, pagination } =
         addressData
 
-      setTableData(transactionsData)
+      setTableRows(transactionsData)
       setUserAddress(userAddress)
-      setTableColumns(transactionsColumns)
+      setTableHeaders(transactionsColumns)
       setPagination(pagination)
     }
   }, [])
@@ -74,7 +80,7 @@ export default function Dashboard() {
         pagination: { has_more, page_number },
       } = requestData.data
 
-      const tableData = items.map((el) => {
+      const tableRows = items.map((el) => {
         const { block_height, block_signed_at, gas_price, tx_hash } = el
 
         return {
@@ -87,24 +93,27 @@ export default function Dashboard() {
         }
       })
 
-      const tableColumns = Object.keys(tableData[0]).map((key) => {
+      const tableHeaders = Object.keys(tableRows[0]).map((key) => {
+        if (key === 'unusedKeys') return {}
+
         return {
           title: key.toUpperCase().replace('_', ' '),
           dataIndex: key,
           key: key,
-          sorter: getSortingFunction(key, tableData[0][key]),
+          sorter: getSortingFunction(key, tableRows[0][key]),
         }
       })
 
       setRequestError(null)
-      setTableData(tableData)
-      setTableColumns(tableColumns)
+      setTableRows(tableRows)
+      setTableHeaders(tableHeaders)
       setPagination({ prev: page_number > 0, next: has_more, page_number })
     } catch (err) {
       setRequestError(err)
-      setTableData(null)
-      setTableColumns(null)
+      setTableRows(null)
+      setTableHeaders(null)
     } finally {
+      console.log({ tableData: tableRows, tableColumns: tableHeaders })
       setLoading(false)
     }
   }
@@ -118,24 +127,19 @@ export default function Dashboard() {
   }
 
   return (
-    <STWrapper>
-      <section>
-        <SearchForm
-          inputName={ADDRESS_INPUT_NAME}
-          message="Enter your address"
-          handleSubmit={handleFormSubmit}
-        />
-      </section>
-      <section>
-        {requestError && (
-          <STTitle color="#fff" bgColor="#a3f">
-            Error {requestError.code}: {requestError.message}. Please try again.
-          </STTitle>
-        )}
-
-        {userAddress && <STTitle>Address: {userAddress}</STTitle>}
-
-        <Table
+    <Container maxWidth="lg" style={{ textAlign: 'center' }}>
+      <SearchForm
+        inputName={ADDRESS_INPUT_NAME}
+        message="Enter your address"
+        handleSubmit={handleFormSubmit}
+      />
+      {requestError && (
+        <Typography component="span">
+          Error {requestError.code}: {requestError.message}. Please try again.
+        </Typography>
+      )}
+      {userAddress && <STTitle>Address: {userAddress}</STTitle>}
+      {/* <Table
           dataSource={tableData}
           columns={tableColumns}
           loading={loading}
@@ -149,31 +153,37 @@ export default function Dashboard() {
               },
             }
           }}
+        /> */}
+      {tableHeaders && tableRows ? (
+        <TransactionsTable
+          headers={tableHeaders}
+          rows={tableRows}
+          onRowClick={(row) => {
+            setTransactionData(row)
+            router.push(`transaction/${row.tx_hash}`)
+          }}
         />
-      </section>
+      ) : null}
 
-      <nav>
-        <button
-          disabled={!pagination.prev}
-          onClick={() =>
+      <br />
+      <br />
+
+      {pagination.page_number !== null ? (
+        <PaginationBar
+          nextPage={pagination.next}
+          previousPage={pagination.prev}
+          onPrevious={() =>
             getAddressData(userAddress, {
               'page-number': pagination.page_number - 1,
             })
           }
-        >
-          Previous
-        </button>
-        <button
-          disabled={!pagination.next}
-          onClick={() =>
+          onNext={() =>
             getAddressData(userAddress, {
               'page-number': pagination.page_number + 1,
             })
           }
-        >
-          Next
-        </button>
-      </nav>
-    </STWrapper>
+        />
+      ) : null}
+    </Container>
   )
 }

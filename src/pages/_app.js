@@ -3,44 +3,25 @@ import '@fontsource/roboto/400.css'
 import '@fontsource/roboto/500.css'
 import '@fontsource/roboto/700.css'
 
-import 'styles/index.css'
+import Header from 'components/Header'
+// import 'styles/index.css'
 
 import { AddressProvider } from 'context/AddressContext'
-import Link from 'next/link'
-import styled from 'styled-components'
+// import Link from 'next/link'
 
-const STNav = styled.nav`
-  display: flex;
-  width: 100%;
-  gap: 1rem;
-  background-color: slateblue;
-  justify-content: space-evenly;
-  color: #fff;
-  padding: 1rem;
+import { createTheme, ThemeProvider } from '@mui/material'
+import CssBaseline from '@mui/material/CssBaseline'
 
-  a {
-    font-size: 1.4rem;
-    color: #fff;
-  }
-`
+const darkTheme = createTheme({ palette: { mode: 'dark' } })
 
 const MyApp = ({ Component, pageProps }) => {
   return (
     <AddressProvider>
-      <header>
-        <STNav>
-          <Link href="/">
-            <a>Home</a>
-          </Link>
-          <Link href="/static-table">
-            <a>Static table</a>
-          </Link>
-          <Link href="/dashboard">
-            <a>Dashboard</a>
-          </Link>
-        </STNav>
-      </header>
-      <Component {...pageProps} />
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <Header />
+        <Component {...pageProps} />
+      </ThemeProvider>
     </AddressProvider>
   )
 }

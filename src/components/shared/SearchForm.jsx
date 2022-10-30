@@ -1,23 +1,37 @@
-import { SearchOutlined } from '@ant-design/icons'
-import { STIconBtn } from 'components/shared/styled'
-import { STForm, STSpan } from 'components/shared/styled'
+import Search from '@mui/icons-material/Search'
+import FormControl from '@mui/material/FormControl'
+import FormGroup from '@mui/material/FormGroup'
+import FormLabel from '@mui/material/FormLabel'
+import Button from '@mui/material/Button'
+import Input from '@mui/material/Input'
 
 export function SearchForm({ handleSubmit, message, inputName }) {
   return (
-    <STForm onSubmit={handleSubmit}>
-      <label htmlFor={inputName}>
-        <STSpan color="#fff">{message}</STSpan>
-      </label>
-      <input
-        required
-        minLength={8}
-        type="text"
-        name={inputName}
-        id={inputName}
-      />
-      <STIconBtn>
-        <SearchOutlined />
-      </STIconBtn>
-    </STForm>
+    <FormControl
+      style={{
+        width: '90%',
+        margin: '1rem auto',
+        padding: '1rem',
+        textAlign: 'center',
+      }}
+      component="form"
+      onSubmit={handleSubmit}
+    >
+      <FormGroup style={{ margin: 'auto' }}>
+        <FormLabel htmlFor={inputName}>{message}</FormLabel>
+        <Input
+          style={{ marginBottom: '2rem' }}
+          fullWidth
+          required
+          minLength={8}
+          type="text"
+          name={inputName}
+          id={inputName}
+        />
+        <Button type="submit" variant="contained" startIcon={<Search />}>
+          SEARCH
+        </Button>
+      </FormGroup>
+    </FormControl>
   )
 }

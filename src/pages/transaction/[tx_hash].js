@@ -1,5 +1,8 @@
-import { LeftOutlined } from '@ant-design/icons'
-import { Table } from 'antd'
+import ChevronLeft from '@mui/icons-material/ChevronLeft'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+
+import { TransactionsTable } from 'components/TransactionsTable'
 import { STTitle } from 'components/shared/styled'
 import { useAddressContext } from 'context/AddressContext'
 import { isEmpty } from 'helpers/isEmpty'
@@ -10,8 +13,8 @@ import { getTransactionData } from 'services/getTransactionData'
 import { v4 as uuid } from 'uuid'
 
 export default function Transaction() {
-  const [tableData, setTableData] = useState([])
-  const [tableColumns, setTableColumns] = useState([])
+  const [tableRows, setTableRows] = useState([])
+  const [tableHeaders, setTableHeaders] = useState([])
   const [loading, setLoading] = useState(false)
   const [requestError, setRequestError] = useState(null)
 
@@ -31,11 +34,11 @@ export default function Transaction() {
     }
 
     const { unusedKeys, ...restKeys } = transactionData
-    const tableData = [{ ...unusedKeys, ...restKeys }]
+    const tableRows = [{ ...unusedKeys, ...restKeys }]
 
-    setTableData(tableData)
-    setTableColumns(
-      Object.keys(tableData[0]).map((key) => ({
+    setTableRows(tableRows)
+    setTableHeaders(
+      Object.keys(tableRows[0]).map((key) => ({
         title: key.toUpperCase().replace('_', ' '),
         dataIndex: key,
         key: key,
@@ -65,14 +68,14 @@ export default function Transaction() {
         }
       })
 
-      setTableData(tableData)
-      setTableColumns(tableColumns)
+      setTableRows(tableData)
+      setTableHeaders(tableColumns)
       setRequestError(null)
     } catch (error) {
       console.log(error)
 
-      setTableData([{}])
-      setTableColumns([{}])
+      setTableRows([{}])
+      setTableHeaders([{}])
       setRequestError(error)
     } finally {
       setLoading(false)
@@ -80,11 +83,11 @@ export default function Transaction() {
   }
 
   return (
-    <section>
+    <Container maxWidth="lg">
       <Link href="/dashboard">
-        <a title="back to dashboard">
-          <LeftOutlined style={{ fontSize: '3rem', padding: '1rem' }} />
-        </a>
+        <Button size="large" startIcon={<ChevronLeft />}>
+          Back to dashboard
+        </Button>
       </Link>
 
       {requestError && (
@@ -96,16 +99,16 @@ export default function Transaction() {
       {tx_hash && (
         <>
           <STTitle color="#fff">Transaction Hash: {tx_hash}</STTitle>
-          <Table
-            dataSource={tableData}
-            columns={tableColumns}
-            loading={loading}
-            style={{ width: '90%', margin: 'auto' }}
-            scroll={{ x: true }}
-            pagination={false}
+          <TransactionsTable
+            rows={tableRows}
+            headers={tableHeaders}
+            // loading={loading}
+            // style={{ width: '90%', margin: 'auto' }}
+            // scroll={{ x: true }}
+            // pagination={false}
           />
         </>
       )}
-    </section>
+    </Container>
   )
 }

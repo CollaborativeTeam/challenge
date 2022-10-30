@@ -1,17 +1,19 @@
-import { DeleteRowButton } from './DeleteRowButton'
+import { DeleteRowButton } from "./DeleteRowButton";
 
-export function TableRow({ itemData, config, handleDeleteRow }) {
-  return (
-    <tr>
-      {config.map((obj) => (
-        <td key={Math.random()}>
-          {obj.dataIndex !== 'delete' ? (
-            itemData[obj.dataIndex]
-          ) : (
-            <DeleteRowButton handleDeleteRow={handleDeleteRow} />
-          )}
-        </td>
-      ))}
-    </tr>
-  )
+export function TableRow ({ itemData, config, handleDeleteRow }) {
+	return (
+		<tr>
+			{config.map((obj) => (
+				<td key={Math.random()}>
+					{obj.dataIndex !== "delete"
+						? (
+							itemData[obj.dataIndex]
+						)
+						: (
+							<DeleteRowButton handleDeleteRow={handleDeleteRow} />
+						)}
+				</td>
+			))}
+		</tr>
+	);
 }

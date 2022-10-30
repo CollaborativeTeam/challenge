@@ -1,3 +1,3 @@
-export function TableHeaderItem({ title, dataIndex }) {
-  return <th key={dataIndex}>{title}</th>
+export function TableHeaderItem ({ title, dataIndex }) {
+	return <th key={dataIndex}>{title}</th>;
 }

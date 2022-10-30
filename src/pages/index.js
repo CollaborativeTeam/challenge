@@ -1,9 +1,9 @@
-import { STTitle } from 'components/shared/styled'
+import { STTitle } from "components/shared/styled";
 
-export default function Home() {
-  return (
-    <>
-      <STTitle>Welcome!</STTitle>
-    </>
-  )
+export default function Home () {
+	return (
+		<>
+			<STTitle>Welcome!</STTitle>
+		</>
+	);
 }

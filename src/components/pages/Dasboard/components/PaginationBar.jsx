@@ -1,19 +1,19 @@
-import { Button } from '@mui/material'
+import { Button } from "@mui/material";
 
-export default function PaginationBar({
-  previousPage,
-  nextPage,
-  onPrevious,
-  onNext,
+export default function PaginationBar ({
+	previousPage,
+	nextPage,
+	onPrevious,
+	onNext
 }) {
-  return (
-    <nav>
-      <Button variant="contained" disabled={!previousPage} onClick={onPrevious}>
+	return (
+		<nav>
+			<Button variant="contained" disabled={!previousPage} onClick={onPrevious}>
         Previous
-      </Button>
-      <Button variant="contained" disabled={!nextPage} onClick={onNext}>
+			</Button>
+			<Button variant="contained" disabled={!nextPage} onClick={onNext}>
         Next
-      </Button>
-    </nav>
-  )
+			</Button>
+		</nav>
+	);
 }

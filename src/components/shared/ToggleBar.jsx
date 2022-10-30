@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const SwitchContainer = styled.div`
   height: 5em;
@@ -6,7 +6,7 @@ const SwitchContainer = styled.div`
   box-shadow: 0px 5px 5px 5px #071b2627;
   border-radius: 5em;
   position: relative;
-`
+`;
 
 const SwitchColor = styled.div`
   width: 11em;
@@ -18,7 +18,7 @@ const SwitchColor = styled.div`
   z-index: 20;
   position: absolute;
   transition: all 1.2s ease;
-`
+`;
 
 const Switch = styled.input`
   display: none;
@@ -38,7 +38,7 @@ const Switch = styled.input`
   &:checked ~ div {
     background: #00e676;
   }
-`
+`;
 
 const SwitchLabel = styled.label`
   height: 4em;
@@ -73,19 +73,19 @@ const SwitchLabel = styled.label`
     content: '✓';
     opacity: 0;
   }
-`
+`;
 
-export function ToggleBar({ handleChecked, checked }) {
-  return (
-    <SwitchContainer>
-      <Switch
-        onChange={handleChecked}
-        checked={checked}
-        type="checkbox"
-        id="switch"
-      />
-      <SwitchColor />
-      <SwitchLabel htmlFor="switch" />
-    </SwitchContainer>
-  )
+export function ToggleBar ({ handleChecked, checked }) {
+	return (
+		<SwitchContainer>
+			<Switch
+				onChange={handleChecked}
+				checked={checked}
+				type="checkbox"
+				id="switch"
+			/>
+			<SwitchColor />
+			<SwitchLabel htmlFor="switch" />
+		</SwitchContainer>
+	);
 }

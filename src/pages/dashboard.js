@@ -17,129 +17,127 @@ import { v4 as uuid } from "uuid";
 
 const ADDRESS_INPUT_NAME = "address";
 const INITIAL_PARAMS = {
-	key: process.env.NEXT_PUBLIC_API_KEY,
-	"no-logs": true,
-	"page-size": 10,
-	"page-number": 0
+  key: process.env.NEXT_PUBLIC_API_KEY,
+  "no-logs": true,
+  "page-size": 10,
+  "page-number": 0
 };
 
-export default function Dashboard () {
-	const [tableRows, setTableRows] = useState(null);
-	const [tableHeaders, setTableHeaders] = useState(null);
-	const [requestError, setRequestError] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [userAddress, setUserAddress] = useState("");
-	const [pagination, setPagination] = useState({
-		prev: null,
-		next: null,
-		page_number: null
-	});
+export default function Dashboard() {
+  const [tableRows, setTableRows] = useState(null);
+  const [tableHeaders, setTableHeaders] = useState(null);
+  const [requestError, setRequestError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [userAddress, setUserAddress] = useState("");
+  const [pagination, setPagination] = useState({
+    prev: null,
+    next: null,
+    page_number: null
+  });
 
-	const router = useRouter();
+  const router = useRouter();
 
-	const { setTransactionData, addressData, setAddressData } =
+  const { setTransactionData, addressData, setAddressData } =
     useAddressContext();
 
-	useEffect(() => {
-		setAddressData({
-			userAddress,
-			pagination,
-			transactionsData: tableRows,
-			transactionsColumns: tableHeaders
-		});
-	}, [tableRows, tableHeaders, userAddress, pagination]);
+  useEffect(() => {
+    setAddressData({
+      userAddress,
+      pagination,
+      transactionsData: tableRows,
+      transactionsColumns: tableHeaders
+    });
+  }, [tableRows, tableHeaders, userAddress, pagination]);
 
-	useEffect(() => {
-		if (!isEmpty(addressData)) {
-			const { transactionsData, transactionsColumns, userAddress, pagination } =
+  useEffect(() => {
+    if (!isEmpty(addressData)) {
+      const { transactionsData, transactionsColumns, userAddress, pagination } =
         addressData;
 
-			setTableRows(transactionsData);
-			setUserAddress(userAddress);
-			setTableHeaders(transactionsColumns);
-			setPagination(pagination);
-		}
-	}, []);
+      setTableRows(transactionsData);
+      setUserAddress(userAddress);
+      setTableHeaders(transactionsColumns);
+      setPagination(pagination);
+    }
+  }, []);
 
-	const getAddressData = async (address = userAddress, params) => {
-		setLoading(true);
-		try {
-			const { data: requestData } = await getAddressTransactions(address, {
-				params: { ...INITIAL_PARAMS, ...params }
-			});
+  const getAddressData = async (address = userAddress, params) => {
+    setLoading(true);
+    try {
+      const { data: requestData } = await getAddressTransactions(address, {
+        params: { ...INITIAL_PARAMS, ...params }
+      });
 
-			if (requestData.error) {
-				throw {
-					code: requestData.error_code,
-					message: requestData.error_message || "There was an error"
-				};
-			}
+      if (requestData.error) {
+        throw {
+          code: requestData.error_code,
+          message: requestData.error_message || "There was an error"
+        };
+      }
 
-			const {
-				items,
-				pagination: { has_more, page_number }
-			} = requestData.data;
+      const {
+        items,
+        pagination: { has_more, page_number }
+      } = requestData.data;
 
-			const tableRows = items.map((el) => {
-				const { block_height, block_signed_at, gas_price, tx_hash } = el;
+      const tableRows = items.map((el) => {
+        const { block_height, block_signed_at, gas_price, tx_hash } = el;
 
-				return {
-					creation_date: new Date(block_signed_at).toLocaleString(),
-					block_height,
-					gas_price,
-					tx_hash,
-					key: uuid(),
-					unusedKeys: el
-				};
-			});
+        return {
+          creation_date: new Date(block_signed_at).toLocaleString(),
+          block_height,
+          gas_price,
+          tx_hash,
+          key: uuid(),
+          unusedKeys: el
+        };
+      });
 
-			const tableHeaders = Object.keys(tableRows[0]).map((key) => {
-				if (key === "unusedKeys") return {};
+      const tableHeaders = Object.keys(tableRows[0]).filter(key => key !== "unusedKeys" && key !== 'key').map((key) => {
+        return {
+          title: key.toUpperCase().replace("_", " "),
+          dataIndex: key,
+          key,
+          sorter: getSortingFunction(key, tableRows[0][key])
+        };
+      });
 
-				return {
-					title: key.toUpperCase().replace("_", " "),
-					dataIndex: key,
-					key,
-					sorter: getSortingFunction(key, tableRows[0][key])
-				};
-			});
+      setRequestError(null);
+      setTableRows(tableRows);
+      setTableHeaders(tableHeaders);
+      setPagination({ prev: page_number > 0, next: has_more, page_number });
+    } catch (err) {
+      setRequestError(err);
+      setTableRows(null);
+      setTableHeaders(null);
+    } finally {
+      console.log({ tableData: tableRows, tableColumns: tableHeaders });
+      setLoading(false);
+    }
+  };
 
-			setRequestError(null);
-			setTableRows(tableRows);
-			setTableHeaders(tableHeaders);
-			setPagination({ prev: page_number > 0, next: has_more, page_number });
-		} catch (err) {
-			setRequestError(err);
-			setTableRows(null);
-			setTableHeaders(null);
-		} finally {
-			console.log({ tableData: tableRows, tableColumns: tableHeaders });
-			setLoading(false);
-		}
-	};
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const formAddress = e.target[ADDRESS_INPUT_NAME].value.trim();
+    if (!formAddress) return;
+    getAddressData(formAddress);
+    setUserAddress(formAddress);
+  };
 
-	const handleFormSubmit = (e) => {
-		e.preventDefault();
-		const formAddress = e.target[ADDRESS_INPUT_NAME].value.trim();
-		if (!formAddress) return;
-		getAddressData(formAddress);
-		setUserAddress(formAddress);
-	};
-
-	return (
-		<Container maxWidth="lg" style={{ textAlign: "center" }}>
-			<SearchForm
-				inputName={ADDRESS_INPUT_NAME}
-				message="Enter your address"
-				handleSubmit={handleFormSubmit}
-			/>
-			{requestError && (
-				<Typography component="span">
+  return (
+    <Container maxWidth="lg" style={{ textAlign: "center" }}>
+      <SearchForm
+        inputName={ADDRESS_INPUT_NAME}
+        message="Enter your address"
+        handleSubmit={handleFormSubmit}
+      />
+      {requestError && (
+        <Typography component="span">
           Error {requestError.code}: {requestError.message}. Please try again.
-				</Typography>
-			)}
-			{userAddress && <STTitle>Address: {userAddress}</STTitle>}
-			{/* <Table
+        </Typography>
+      )}
+      {userAddress && <STTitle>Address: <code>{userAddress}</code></STTitle>}
+      {/* <Table
           dataSource={tableData}
           columns={tableColumns}
           loading={loading}
@@ -154,41 +152,41 @@ export default function Dashboard () {
             }
           }}
         /> */}
-			{tableHeaders && tableRows
-				? (
-					<TransactionsTable
-						loading={loading}
-						headers={tableHeaders}
-						rows={tableRows}
-						onRowClick={(row) => {
-							setTransactionData(row);
-							router.push(`transaction/${row.tx_hash}`);
-						}}
-					/>
-				)
-				: null}
+      {tableHeaders && tableRows
+        ? (
+          <TransactionsTable
+            loading={loading}
+            headers={tableHeaders}
+            rows={tableRows}
+            onRowClick={(row) => {
+              setTransactionData(row);
+              router.push(`transaction/${row.tx_hash}`);
+            }}
+          />
+        )
+        : null}
 
-			<br />
-			<br />
+      <br />
+      <br />
 
-			{pagination.page_number !== null
-				? (
-					<PaginationBar
-						nextPage={pagination.next}
-						previousPage={pagination.prev}
-						onPrevious={() =>
-							getAddressData(userAddress, {
-								"page-number": pagination.page_number - 1
-							})
-						}
-						onNext={() =>
-							getAddressData(userAddress, {
-								"page-number": pagination.page_number + 1
-							})
-						}
-					/>
-				)
-				: null}
-		</Container>
-	);
+      {pagination.page_number !== null
+        ? (
+          <PaginationBar
+            nextPage={pagination.next}
+            previousPage={pagination.prev}
+            onPrevious={() =>
+              getAddressData(userAddress, {
+                "page-number": pagination.page_number - 1
+              })
+            }
+            onNext={() =>
+              getAddressData(userAddress, {
+                "page-number": pagination.page_number + 1
+              })
+            }
+          />
+        )
+        : null}
+    </Container>
+  );
 }

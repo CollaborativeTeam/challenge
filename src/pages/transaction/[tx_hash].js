@@ -12,103 +12,103 @@ import { useEffect, useState } from "react";
 import { getTransactionData } from "services/getTransactionData";
 import { v4 as uuid } from "uuid";
 
-export default function Transaction () {
-	const [tableRows, setTableRows] = useState([]);
-	const [tableHeaders, setTableHeaders] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [requestError, setRequestError] = useState(null);
+export default function Transaction() {
+  const [tableRows, setTableRows] = useState([]);
+  const [tableHeaders, setTableHeaders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [requestError, setRequestError] = useState(null);
 
-	const { transactionData } = useAddressContext();
+  const { transactionData } = useAddressContext();
 
-	const {
-		query: { tx_hash },
-		isReady
-	} = useRouter();
+  const {
+    query: { tx_hash },
+    isReady
+  } = useRouter();
 
-	useEffect(() => {
-		if (!isReady) return;
+  useEffect(() => {
+    if (!isReady) return;
 
-		if (isEmpty(transactionData)) {
-			handleTransactionDataReq();
-			return;
-		}
+    if (isEmpty(transactionData)) {
+      handleTransactionDataReq();
+      return;
+    }
 
-		const { unusedKeys, ...restKeys } = transactionData;
-		const tableRows = [{ ...unusedKeys, ...restKeys }];
+    const { unusedKeys, ...restKeys } = transactionData;
+    const tableRows = [{ ...unusedKeys, ...restKeys }];
 
-		setTableRows(tableRows);
-		setTableHeaders(
-			Object.keys(tableRows[0]).map((key) => ({
-				title: key.toUpperCase().replace("_", " "),
-				dataIndex: key,
-				key
-			}))
-		);
-	}, [isReady]);
+    setTableRows(tableRows);
+    setTableHeaders(
+      Object.keys(tableRows[0]).map((key) => ({
+        title: key.toUpperCase().replace("_", " "),
+        dataIndex: key,
+        key
+      }))
+    );
+  }, [isReady]);
 
-	const handleTransactionDataReq = async () => {
-		setLoading(true);
-		try {
-			const { data: requestData } = await getTransactionData(tx_hash);
+  const handleTransactionDataReq = async () => {
+    setLoading(true);
+    try {
+      const { data: requestData } = await getTransactionData(tx_hash);
 
-			if (requestData.error) {
-				throw {
-					code: requestData.error_code,
-					message: requestData.error_message || "There was an error"
-				};
-			}
+      if (requestData.error) {
+        throw {
+          code: requestData.error_code,
+          message: requestData.error_message || "There was an error"
+        };
+      }
 
-			const tableData = [{ ...requestData.data.items[0], key: uuid() }];
+      const tableData = [{ ...requestData.data.items[0], key: uuid() }];
 
-			const tableColumns = Object.keys(tableData[0]).map((key) => {
-				return {
-					title: key.toUpperCase().replace("_", " "),
-					dataIndex: key,
-					key
-				};
-			});
+      const tableColumns = Object.keys(tableData[0]).map((key) => {
+        return {
+          title: key.toUpperCase().replace("_", " "),
+          dataIndex: key,
+          key
+        };
+      });
 
-			setTableRows(tableData);
-			setTableHeaders(tableColumns);
-			setRequestError(null);
-		} catch (error) {
-			console.log(error);
+      setTableRows(tableData);
+      setTableHeaders(tableColumns);
+      setRequestError(null);
+    } catch (error) {
+      console.log(error);
 
-			setTableRows([{}]);
-			setTableHeaders([{}]);
-			setRequestError(error);
-		} finally {
-			setLoading(false);
-		}
-	};
+      setTableRows([{}]);
+      setTableHeaders([{}]);
+      setRequestError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-	return (
-		<Container maxWidth="lg">
-			<Link href="/dashboard">
-				<Button size="large" startIcon={<ChevronLeft />}>
+  return (
+    <Container maxWidth="lg">
+      <Link href="/dashboard">
+        <Button size="large" startIcon={<ChevronLeft />}>
           Back to dashboard
-				</Button>
-			</Link>
+        </Button>
+      </Link>
 
-			{requestError && (
-				<STTitle color="#fff" bgColor="#a3f">
+      {requestError && (
+        <STTitle color="#fff" bgColor="#a3f">
           Error {requestError.code}: {requestError.message}. Please try again.
-				</STTitle>
-			)}
+        </STTitle>
+      )}
 
-			{tx_hash && (
-				<>
-					<STTitle color="#fff">Transaction Hash: {tx_hash}</STTitle>
-					<TransactionsTable
-						rows={tableRows}
-						headers={tableHeaders}
-						loading={loading}
-						// style={{ width: '90%', margin: 'auto' }}
-						// scroll={{ x: true }}
-						// pagination={false}
-					/>
-				</>
-			)}
-		</Container>
-	);
+      {tx_hash && (
+        <>
+          <STTitle color="#fff">Transaction Hash: <code>{tx_hash}</code></STTitle>
+          <TransactionsTable
+            rows={tableRows}
+            headers={tableHeaders}
+            loading={loading}
+          // style={{ width: '90%', margin: 'auto' }}
+          // scroll={{ x: true }}
+          // pagination={false}
+          />
+        </>
+      )}
+    </Container>
+  );
 }

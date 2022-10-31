@@ -57,4 +57,18 @@ export const STTitle = styled.h3`
   font-size: 1.5rem;
   background-color: ${({ bgColor }) => bgColor};
   color: ${({ color }) => color};
+  word-wrap: break-word;
+  text-align: center;
+  line-height: 2;
+
+  code {
+    /* display: block; */
+    background-color: #454545;
+    border-radius: 10px;
+
+    font-size: 1rem;
+    width: fit-content;
+    margin: 1rem auto;
+    padding: .5rem 1rem;
+  }
 `;

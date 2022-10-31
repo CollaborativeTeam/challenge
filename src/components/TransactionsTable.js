@@ -9,75 +9,74 @@ import { v4 } from "uuid";
 import { Loader } from "./shared/Loader";
 
 export function TransactionsTable({
-	headers = [],
-	rows = [],
-	onRowClick,
-	loading = false
+  headers = [],
+  rows = [],
+  onRowClick,
+  loading = false
 }) {
-	return (
-		<Table
-			style={{
-				overflowY: "scroll",
-				overflowX: "scroll",
-				maxHeight: "400px",
-				margin: "auto"
-			}}
-		>
-			{
-				loading
-					? (
-						<Loader color="#fff" />
-					)
-					: (
-						<>
-							<TableHead>
-								<TableRow>
-									<TableCell>DETAILS</TableCell>
 
-									{headers.map((header) => (
-										<>
-											<TableCell>{header.title}</TableCell>
-										</>
-									))}
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{rows.map((row) => (
-									<TableRow
-										sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-										key={v4()}
-									>
-										{onRowClick
-											? (
-												<TableCell>
-													<Button onClick={() => onRowClick(row)}>
+  console.log({ headers });
+
+  return (
+    <Table
+      style={{
+        width: '100%',
+        overflowY: "scroll",
+        overflowX: "auto",
+        maxHeight: "600px",
+        margin: "auto"
+      }}
+    >
+      {
+        loading
+          ? (
+            <Loader color="#fff" />
+          )
+          : (
+            <>
+              <TableHead>
+                <TableRow>
+                  <TableCell>DETAILS</TableCell>
+
+                  {headers.map((header) => (
+                    <>
+                      <TableCell >{header.title}</TableCell>
+                    </>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    key={v4()}
+                  >
+                    {onRowClick
+                      ? (
+                        <TableCell>
+                          <Button onClick={() => onRowClick(row)}>
                             View details
-													</Button>
-												</TableCell>
-											)
-											: null}
+                          </Button>
+                        </TableCell>
+                      )
+                      : null}
 
-										{headers.map((header) => {
-											// console.log({
-											//   'row[header.key]': row[header.key],
-											//   'header.key': header.key,
-											//   row,
-											// })
-											return (
-												<>
-													{typeof row[header.key] !== "object"
-														? (
-															<TableCell scope="row">{row[header.key]}</TableCell>
-														)
-														: null}
-												</>
-											);
-										})}
-									</TableRow>
-								))}
-							</TableBody>
-						</>
-					)}
-		</Table>
-	);
+                    {headers.map((header) => {
+                      return (
+                        <>
+                          {typeof row[header.key] !== "object"
+                            ? (
+                              <TableCell scope="row">{row[header.key]}</TableCell>
+                            )
+                            : null}
+                        </>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </>
+          )}
+    </Table>
+  );
 }

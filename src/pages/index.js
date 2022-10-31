@@ -1,9 +1,3 @@
-import { STTitle } from "components/shared/styled";
+import Home from 'components/pages/Home/Home.jsx'
 
-export default function Home () {
-	return (
-		<>
-			<STTitle>Welcome!</STTitle>
-		</>
-	);
-}
+export default Home

@@ -1,9 +1,6 @@
 import ChevronLeft from '@mui/icons-material/ChevronLeft'
 import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
 
-import { TransactionsTable } from 'components/shared/TransactionsTable/TransactionsTable'
-import { STTitle } from 'components/shared/styled'
 import { useAddressContext } from 'context/AddressContext'
 import { isEmpty } from 'helpers/isEmpty'
 import Link from 'next/link'
@@ -11,10 +8,10 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { getTransactionData } from 'services/getTransactionData'
 import { v4 as uuid } from 'uuid'
+import { TransactionCard } from 'components/pages/Transaction/components/TransactionCard'
 
 export default function Transaction() {
-  const [tableRows, setTableRows] = useState([])
-  const [tableHeaders, setTableHeaders] = useState([])
+  const [cardData, setCardData] = useState([])
   const [loading, setLoading] = useState(false)
   const [requestError, setRequestError] = useState(null)
 
@@ -34,16 +31,10 @@ export default function Transaction() {
     }
 
     const { unusedKeys, ...restKeys } = transactionData
-    const tableRows = [{ ...unusedKeys, ...restKeys }]
 
-    setTableRows(tableRows)
-    setTableHeaders(
-      Object.keys(tableRows[0]).map((key) => ({
-        title: key.toUpperCase().replace('_', ' '),
-        dataIndex: key,
-        key,
-      }))
-    )
+    const cardData = Object.entries({ ...unusedKeys, ...restKeys })
+
+    setCardData(cardData)
   }, [isReady])
 
   const handleTransactionDataReq = async () => {
@@ -58,24 +49,14 @@ export default function Transaction() {
         }
       }
 
-      const tableData = [{ ...requestData.data.items[0], key: uuid() }]
+      const cardData = [{ ...requestData.data.items[0], key: uuid() }]
 
-      const tableColumns = Object.keys(tableData[0]).map((key) => {
-        return {
-          title: key.toUpperCase().replace('_', ' '),
-          dataIndex: key,
-          key,
-        }
-      })
-
-      setTableRows(tableData)
-      setTableHeaders(tableColumns)
+      setCardData(cardData)
       setRequestError(null)
     } catch (error) {
       console.log(error)
 
-      setTableRows([{}])
-      setTableHeaders([{}])
+      setCardData([{}])
       setRequestError(error)
     } finally {
       setLoading(false)
@@ -83,20 +64,14 @@ export default function Transaction() {
   }
 
   return (
-    <Container maxWidth="lg">
+    <>
       <Link href="/">
         <Button size="large" startIcon={<ChevronLeft />}>
           Back to dashboard
         </Button>
       </Link>
 
-      {tx_hash && (
-        <TransactionsTable
-          rows={tableRows}
-          headers={tableHeaders}
-          loading={loading}
-        />
-      )}
-    </Container>
+      {tx_hash && <TransactionCard data={cardData} loading={loading} />}
+    </>
   )
 }

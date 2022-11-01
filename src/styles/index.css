@@ -15,3 +15,7 @@ body {
 input:-webkit-autofill {
   transition: all 0s 50000s;
 }
+
+main {
+  padding: 0 1rem;
+}

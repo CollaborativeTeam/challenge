@@ -15,11 +15,9 @@ export function TransactionsTable({
   return (
     <div
       style={{
-        width: '100%',
-        overflowY: 'scroll',
+        overflowY: 'auto',
         overflowX: 'auto',
         maxHeight: '600px',
-        margin: 'auto',
       }}
     >
       {loading ? (

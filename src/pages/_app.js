@@ -19,7 +19,11 @@ const MyApp = ({ Component, pageProps }) => {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <Header />
-        <Component {...pageProps} />
+
+        <main>
+          <Component {...pageProps} />
+        </main>
+
       </ThemeProvider>
     </AddressProvider>
   );

@@ -90,23 +90,12 @@ export default function Transaction() {
         </Button>
       </Link>
 
-      {requestError && (
-        <STTitle color="#fff" bgColor="#a3f">
-          Error {requestError.code}: {requestError.message}. Please try again.
-        </STTitle>
-      )}
-
       {tx_hash && (
-        <>
-          <STTitle color="#fff">
-            Transaction Hash: <code>{tx_hash}</code>
-          </STTitle>
-          <TransactionsTable
-            rows={tableRows}
-            headers={tableHeaders}
-            loading={loading}
-          />
-        </>
+        <TransactionsTable
+          rows={tableRows}
+          headers={tableHeaders}
+          loading={loading}
+        />
       )}
     </Container>
   )

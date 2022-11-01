@@ -1,9 +1,6 @@
-import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
-
 import PaginationBar from 'components/pages/Home/components/PaginationBar'
 import { SearchForm } from 'components/shared/SearchForm'
-import { STTitle } from 'components/shared/styled'
 import { TransactionsTable } from 'components/shared/TransactionsTable/TransactionsTable'
 import { useAddressContext } from 'context/AddressContext'
 import { isEmpty } from 'helpers/isEmpty'
@@ -123,7 +120,7 @@ export default function Home() {
   }
 
   return (
-    <Container maxWidth="lg" style={{ textAlign: 'center' }}>
+    <>
       <SearchForm
         inputName={ADDRESS_INPUT_NAME}
         message="Enter your address"
@@ -133,11 +130,6 @@ export default function Home() {
         <Typography component="span">
           Error {requestError.code}: {requestError.message}. Please try again.
         </Typography>
-      )}
-      {userAddress && (
-        <STTitle>
-          Address: <code>{userAddress}</code>
-        </STTitle>
       )}
 
       {pagination.page_number !== null ? (
@@ -168,9 +160,6 @@ export default function Home() {
           }}
         />
       ) : null}
-
-      <br />
-      <br />
-    </Container>
+    </>
   )
 }

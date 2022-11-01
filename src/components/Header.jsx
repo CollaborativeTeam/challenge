@@ -44,9 +44,6 @@ export default function Header() {
         <Button variant="button" underline="hover" href="/">
           Home
         </Button>
-        <Button variant="button" underline="hover" href="/dashboard">
-          Dashboard
-        </Button>
       </Stack>
     </AppBar>
   )

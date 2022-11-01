@@ -84,7 +84,7 @@ export default function Transaction() {
 
   return (
     <Container maxWidth="lg">
-      <Link href="/dashboard">
+      <Link href="/">
         <Button size="large" startIcon={<ChevronLeft />}>
           Back to dashboard
         </Button>

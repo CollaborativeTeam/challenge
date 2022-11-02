@@ -4,23 +4,29 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import Button from '@mui/material/Button'
 
-export function TransactionsTableBody({ rows, headers, onRowClick }) {
+export function TransactionsTableBody({
+  transactionFields,
+  onRowClick,
+  transactionHashes,
+}) {
   return (
     <TableBody>
-      {rows.map((row) => (
+      {transactionFields.map((transaction, index) => (
         <TableRow
           key={uuid()}
           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
           {onRowClick ? (
             <TableCell>
-              <Button onClick={() => onRowClick(row)}>View details</Button>
+              <Button onClick={() => onRowClick(transactionHashes[index])}>
+                View details
+              </Button>
             </TableCell>
           ) : null}
 
-          {headers.map((header) => (
-            <TableCell scope="row" key={uuid()}>
-              {typeof row[header.key] !== 'object' ? row[header.key] : null}
+          {transaction.map((field) => (
+            <TableCell key={uuid()} scope="row">
+              {field}
             </TableCell>
           ))}
         </TableRow>

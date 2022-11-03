@@ -17,5 +17,10 @@ input:-webkit-autofill {
 }
 
 main {
-  padding: 0 1rem;
+  padding: 1rem;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
 }

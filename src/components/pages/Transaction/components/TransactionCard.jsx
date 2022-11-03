@@ -1,26 +1,27 @@
 import styled from 'styled-components'
+import { v4 as uuid } from 'uuid'
 
-const STArticle = styled.article`
-  background-color: steelblue;
+const STCard = styled.article`
+  background-color: #232323;
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
-  text-align: center;
-
-  span {
-    background-color: rebeccapurple;
-  }
+  font-size: 1.4rem;
 `
 
-export function TransactionCard({ data = [] }) {
+export function TransactionCard({ transaction = {} }) {
   return (
-    <STArticle>
-      {data.map((item) => (
-        <span>
-          {item[0].replace(/[-_]/, ' ').toUpperCase()}: {item[1]}
-        </span>
+    <STCard>
+      {Object.entries(transaction).map(([key, value]) => (
+        <div key={uuid()}>
+          <span>{key.replace(/[-_]/, ' ').toUpperCase()}</span>:{' '}
+          <span>{value}</span>
+        </div>
       ))}
-    </STArticle>
+    </STCard>
   )
 }

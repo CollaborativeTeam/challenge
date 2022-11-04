@@ -16,6 +16,17 @@ export default function Home() {
     setTransactionHash,
   } = useTransactionsContext()
 
+  const mappedTransactions = transactions.map((transaction) => {
+    const { block_height, block_signed_at, gas_price, tx_hash } = transaction
+
+    return {
+      creation_date: new Date(block_signed_at).toLocaleString(),
+      block_height,
+      gas_price,
+      tx_hash,
+    }
+  })
+
   const handleOnNext = () => {
     handleTransactionsRequest(null, {
       'page-number': pagination.page_number + 1,
@@ -38,7 +49,7 @@ export default function Home() {
 
       {loading ? null : (
         <TransactionsTable
-          transactions={transactions}
+          transactions={mappedTransactions}
           onRowClick={(transactionHash) => {
             router.push(`transaction/${transactionHash}`)
             setTransactionHash(transactionHash)

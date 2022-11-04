@@ -1,12 +1,10 @@
 import Table from '@mui/material/TableContainer'
+import { Loader } from 'components/shared/Loader'
 import { TransactionsTableBody } from './components/TransactionsTableBody'
 import { TransactionsTableHead } from './components/TransactionsTableHead'
 
-export function TransactionsTable({ transactions = [], onRowClick }) {
+export function TransactionsTable({ transactions = [], onRowClick, loading }) {
   const headers = transactions[0] ? Object.keys(transactions[0]) : []
-
-  console.log({ transactions })
-  // console.log({ transactions[n].tx_hash })
 
   const transactionHashes = transactions.map(
     (transaction) => transaction.tx_hash
@@ -26,15 +24,31 @@ export function TransactionsTable({ transactions = [], onRowClick }) {
         maxHeight: '600px',
       }}
     >
-      <Table component="table">
-        <TransactionsTableHead headers={headers} />
+      {loading ? (
+        <div
+          style={{
+            margin: 'auto',
+            width: '100px',
+            height: '600px',
+            display: 'flex',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Loader color="#90CAF9" />
+        </div>
+      ) : (
+        <Table component="table">
+          <TransactionsTableHead headers={headers} />
 
-        <TransactionsTableBody
-          transactionFields={transactionFields}
-          onRowClick={onRowClick}
-          transactionHashes={transactionHashes}
-        />
-      </Table>
+          <TransactionsTableBody
+            transactionFields={transactionFields}
+            onRowClick={onRowClick}
+            transactionHashes={transactionHashes}
+          />
+        </Table>
+      )}
     </div>
   )
 }

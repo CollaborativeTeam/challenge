@@ -47,15 +47,14 @@ export default function Home() {
         </Typography>
       )}
 
-      {loading ? null : (
-        <TransactionsTable
-          transactions={mappedTransactions}
-          onRowClick={(transactionHash) => {
-            router.push(`transaction/${transactionHash}`)
-            setTransactionHash(transactionHash)
-          }}
-        />
-      )}
+      <TransactionsTable
+        loading={loading}
+        transactions={mappedTransactions}
+        onRowClick={(transactionHash) => {
+          router.push(`transaction/${transactionHash}`)
+          setTransactionHash(transactionHash)
+        }}
+      />
 
       {pagination.page_number !== null ? (
         <PaginationBar

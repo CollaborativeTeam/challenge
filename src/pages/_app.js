@@ -6,7 +6,7 @@ import "@fontsource/roboto/700.css";
 import Header from "components/Header";
 import 'styles/index.css'
 
-import { AddressProvider } from "context/AddressContext";
+import { TransactionsProvider } from "context/TransactionsContext";
 
 import { createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,7 +15,7 @@ const darkTheme = createTheme({ palette: { mode: "dark" } });
 
 const MyApp = ({ Component, pageProps }) => {
   return (
-    <AddressProvider>
+    <TransactionsProvider>
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <Header />
@@ -25,7 +25,7 @@ const MyApp = ({ Component, pageProps }) => {
         </main>
 
       </ThemeProvider>
-    </AddressProvider>
+    </TransactionsProvider>
   );
 };
 

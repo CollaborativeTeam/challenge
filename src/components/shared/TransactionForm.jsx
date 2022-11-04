@@ -1,5 +1,4 @@
 import { useTransactionsContext } from 'context/TransactionsContext'
-import { getAddressTransactions } from 'services/getAddressTransactions'
 import { SearchForm } from './SearchForm'
 
 const ADDRESS_INPUT_NAME = 'address'

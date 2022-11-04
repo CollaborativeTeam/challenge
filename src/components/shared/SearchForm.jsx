@@ -12,6 +12,7 @@ export function SearchForm({ handleSubmit, message, inputName, loading }) {
         width: '100%',
         maxWidth: '600px',
         alignItem: 'center',
+        padding: 'auto 1rem',
       }}
       component="form"
       onSubmit={handleSubmit}
@@ -37,11 +38,12 @@ export function SearchForm({ handleSubmit, message, inputName, loading }) {
         />
 
         <Button
+          disabled={loading}
           style={{ borderRadius: '0 5px 5px 0', width: '50px' }}
           type="submit"
           variant="contained"
         >
-          {loading ? <Loader color="#000" /> : <Search />}
+          <Search />
         </Button>
       </FormGroup>
     </FormControl>

@@ -4,8 +4,18 @@ import Link from 'next/link'
 
 export function NavBar() {
   return (
-    <Link style={{ margin: '2rem' }} href="/">
-      <Button size="large" startIcon={<ChevronLeft />}>
+    <Link href="/">
+      <Button
+        style={{
+          display: 'flex',
+          position: 'fixed',
+          top: '6.5rem',
+          left: '1rem',
+          backgroundColor: '#0009',
+        }}
+        size="large"
+        startIcon={<ChevronLeft />}
+      >
         Back to dashboard
       </Button>
     </Link>

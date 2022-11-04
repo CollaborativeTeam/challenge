@@ -1,5 +1,6 @@
 import Table from '@mui/material/TableContainer'
 import { Loader } from 'components/shared/Loader'
+import { isEmpty } from 'helpers/isEmpty'
 import { TransactionsTableBody } from './components/TransactionsTableBody'
 import { TransactionsTableHead } from './components/TransactionsTableHead'
 
@@ -40,13 +41,17 @@ export function TransactionsTable({ transactions = [], onRowClick, loading }) {
         </div>
       ) : (
         <Table component="table">
-          <TransactionsTableHead headers={headers} />
+          {isEmpty(transactions) ? null : (
+            <>
+              <TransactionsTableHead headers={headers} />
 
-          <TransactionsTableBody
-            transactionFields={transactionFields}
-            onRowClick={onRowClick}
-            transactionHashes={transactionHashes}
-          />
+              <TransactionsTableBody
+                transactionFields={transactionFields}
+                onRowClick={onRowClick}
+                transactionHashes={transactionHashes}
+              />
+            </>
+          )}
         </Table>
       )}
     </div>

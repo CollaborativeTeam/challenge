@@ -36,6 +36,10 @@ export const TransactionsProvider = ({ children }) => {
   }, [transactionHash])
 
   const handleTransactionsRequest = async (address, params) => {
+    if (!/^\/$/.test(router.pathname)) {
+      router.push('/')
+    }
+
     setLoading(true)
     try {
       const { data: requestData } = await getAddressTransactions(
@@ -65,10 +69,6 @@ export const TransactionsProvider = ({ children }) => {
       setTransactions([])
     } finally {
       setLoading(false)
-
-      if (!/^\/$/.test(router.pathname)) {
-        router.push('/')
-      }
     }
   }
 
